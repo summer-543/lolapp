@@ -1,5 +1,5 @@
 let allChampions = [];
-// スプラッシュアート表示用に、現在開いているキャラクターのIDを保持する変数
+// スプラッシュアート表示用キャラクターID
 let currentModalChampId = null;
 
 function escapeHTML(str) {
@@ -136,7 +136,7 @@ window.onload = async () => {
     } catch (error) {
         console.error("データの取得に失敗しました", error);
         document.getElementById('champion-grid').innerHTML =
-            '<div class="col-span-full text-center text-red-500 py-10 font-bold">データの読み込みに失敗しました。サーバーが起動しているか確認してください。</div>';
+            '<div class="col-span-full text-center text-red-500 py-10 font-bold lg:text-lg">データの読み込みに失敗しました。サーバーが起動しているか確認してください。</div>';
     }
 };
 
@@ -178,7 +178,7 @@ function renderQuestion() {
 
     q.options.forEach(opt => {
         const btn = document.createElement('button');
-        btn.className = 'bg-[#1e2328] border border-gray-600 hover:border-gold hover:bg-[#c8aa6e] hover:bg-opacity-20 text-gray-200 font-medium py-3.5 px-6 rounded-lg transition-all duration-200 shadow text-left';
+        btn.className = 'bg-[#1e2328] border-2 border-gray-600 hover:border-gold hover:bg-[#c8aa6e] hover:bg-opacity-20 text-gray-200 font-medium text-sm sm:text-base lg:text-lg xl:text-xl py-3 px-6 lg:py-4 lg:px-8 rounded-lg lg:rounded-xl transition-all duration-200 shadow text-left';
         btn.textContent = opt.label;
         btn.onclick = () => selectOption(opt);
         container.appendChild(btn);
@@ -261,30 +261,39 @@ async function showResult() {
 }
 
 function renderResultCard(champ, isFirst, orderClass) {
-    const sizeClass = isFirst ? "w-full max-w-[220px] md:max-w-[260px] scale-100 z-10" : "w-full max-w-[180px] md:max-w-[220px] md:scale-95 opacity-90 hover:opacity-100";
+    const sizeClass = isFirst ? "w-full max-w-[220px] md:max-w-[280px] lg:max-w-[340px] xl:max-w-[360px] scale-100 z-10" : "w-full max-w-[180px] md:max-w-[240px] lg:max-w-[280px] xl:max-w-[300px] md:scale-95 opacity-90 hover:opacity-100";
     const shadowClass = isFirst ? "shadow-[0_0_30px_rgba(200,170,110,0.4)]" : "shadow-lg";
     const borderClass = isFirst ? "border-gold" : "border-gray-500 hover:border-gold";
 
+    let nameSizeClass = "text-2xl sm:text-3xl lg:text-4xl";
+    if (champ.name.length >= 11) {
+        nameSizeClass = "text-sm sm:text-base lg:text-lg";
+    } else if (champ.name.length >= 8) {
+        nameSizeClass = "text-base sm:text-lg lg:text-xl";
+    } else if (champ.name.length >= 6) {
+        nameSizeClass = "text-xl sm:text-2xl lg:text-3xl";
+    }
+
     return `
-        <div class="flex flex-col items-center ${sizeClass} ${orderClass} transition-all duration-300 mx-auto mt-6">
+        <div class="flex flex-col items-center ${sizeClass} ${orderClass} transition-all duration-300 mx-1 md:mx-2 mt-6">
             <div class="w-full bg-panel border-2 ${borderClass} rounded-xl overflow-hidden ${shadowClass} flex flex-col">
                 
-                <!-- 【修正】画像クリックでスプラッシュアートを開く -->
                 <div class="relative pt-[100%] bg-black cursor-pointer overflow-hidden group" onclick="openSplashFromResult(${champ.id})">
                     <img src="${champ.tilePath || champ.imagePath}" onerror="this.onerror=null; this.src='${champ.imagePath}'" class="absolute top-0 left-0 w-full h-full object-cover object-center opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
                     
                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all flex items-center justify-center">
-                        <svg class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        <svg class="w-10 h-10 lg:w-16 lg:h-16 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
                     
-                    ${isFirst ? '<div class="absolute top-0 right-0 bg-gold text-black text-xs font-black px-3 py-1 rounded-bl-lg">BEST MATCH</div>' : ''}
+                    ${isFirst ? '<div class="absolute top-0 right-0 bg-gold text-black text-xs lg:text-sm xl:text-base font-black px-3 py-1.5 lg:py-2 rounded-bl-lg">BEST MATCH</div>' : ''}
                 </div>
                 
-                <div class="p-3 flex flex-col items-center bg-[#1e2328] relative z-10 border-t border-gray-700/50">
-                    <p class="lol-title text-gold text-[9px] sm:text-[10px] tracking-[0.15em] font-bold mb-1 truncate w-full text-center">${escapeHTML(champ.title)}</p>
-                    <h3 class="lol-title text-xl sm:text-2xl font-black text-white tracking-tight truncate w-full text-center mb-3">${escapeHTML(champ.name)}</h3>
-                    <!-- 詳細を見るボタンはそのまま詳細モーダルを開く -->
-                    <button onclick="openModal(${champ.id})" class="w-full bg-[#0a1428] hover:bg-[#c8aa6e] text-gray-300 hover:text-white border border-gray-600 hover:border-[#c8aa6e] text-[10px] sm:text-xs font-bold py-2 px-3 rounded transition-colors">
+                <div class="p-4 lg:p-6 flex flex-col items-center bg-[#1e2328] relative z-10 border-t border-gray-700/50">
+                    <p class="lol-title text-gold text-[10px] sm:text-xs lg:text-sm tracking-[0.15em] font-bold mb-1.5 truncate w-full text-center">${escapeHTML(champ.title)}</p>
+                    
+                    <h3 class="lol-title ${nameSizeClass} font-black text-white tracking-tight truncate w-full text-center mb-4 lg:mb-6">${escapeHTML(champ.name)}</h3>
+                    
+                    <button onclick="openModal(${champ.id})" class="w-full bg-[#0a1428] hover:bg-[#c8aa6e] text-gray-300 hover:text-white border border-gray-600 hover:border-[#c8aa6e] text-[11px] sm:text-xs lg:text-base font-bold py-2.5 lg:py-3.5 px-4 rounded transition-colors">
                         詳細を見る
                     </button>
                 </div>
@@ -305,8 +314,8 @@ function selectQuizSetting(type, val) {
         selectedGenre = val;
         ['ALL', 'VISUAL', 'SPELL', 'KNOWLEDGE'].forEach(g => {
             const btn = document.getElementById('btn-genre-' + g);
-            btn.className = (g === val) ? "quiz-genre-btn border-2 border-gold bg-gold/20 text-white font-bold py-3 rounded-lg transition-colors"
-                : "quiz-genre-btn border-2 border-gray-700 bg-[#1e2328] hover:border-gold/50 text-gray-300 font-bold py-3 rounded-lg transition-colors";
+            btn.className = (g === val) ? "quiz-genre-btn border-2 border-gold bg-gold/20 text-white font-bold py-3 lg:py-4 rounded-lg lg:rounded-xl transition-colors lg:text-lg"
+                : "quiz-genre-btn border-2 border-gray-700 bg-[#1e2328] hover:border-gold/50 text-gray-300 font-bold py-3 lg:py-4 rounded-lg lg:rounded-xl transition-colors lg:text-lg";
         });
     } else {
         selectedDifficulty = val;
@@ -314,10 +323,10 @@ function selectQuizSetting(type, val) {
             const btn = document.getElementById('btn-diff-' + d);
             if (d === val) {
                 const activeClass = (d === 'NORMAL') ? "border-blue-500 bg-blue-500/20 text-white" : "border-red-500 bg-red-500/20 text-white";
-                btn.className = `quiz-diff-btn border-2 ${activeClass} font-bold py-3 rounded-lg transition-colors`;
+                btn.className = `quiz-diff-btn border-2 ${activeClass} font-bold py-3 lg:py-4 rounded-lg lg:rounded-xl transition-colors lg:text-lg`;
             } else {
                 const hoverBorder = (d === 'NORMAL') ? "hover:border-blue-500/50" : "hover:border-red-500/50";
-                btn.className = `quiz-diff-btn border-2 border-gray-700 bg-[#1e2328] ${hoverBorder} text-gray-300 font-bold py-3 rounded-lg transition-colors`;
+                btn.className = `quiz-diff-btn border-2 border-gray-700 bg-[#1e2328] ${hoverBorder} text-gray-300 font-bold py-3 lg:py-4 rounded-lg lg:rounded-xl transition-colors lg:text-lg`;
             }
         });
     }
@@ -329,7 +338,7 @@ async function startQuizSession() {
     document.getElementById('quiz-header-streak').textContent = "0";
     document.getElementById('quiz-header-lives').textContent = selectedDifficulty === 'HARD' ? '❤️' : '❤️❤️❤️';
     document.getElementById('quiz-question-text').textContent = "";
-    document.getElementById('quiz-options').innerHTML = '<div class="col-span-full text-gold text-xl font-bold animate-pulse py-10 w-full text-center tracking-widest">サーバー接続中...</div>';
+    document.getElementById('quiz-options').innerHTML = '<div class="col-span-full text-gold text-xl lg:text-2xl font-bold animate-pulse py-10 w-full text-center tracking-widest">サーバー接続中...</div>';
     document.getElementById('quiz-image-container').classList.add('hidden');
     document.getElementById('giveup-container').classList.add('hidden');
 
@@ -347,7 +356,7 @@ async function startQuizSession() {
         await fetchNextQuestion();
     } catch (error) {
         console.error(error);
-        document.getElementById('quiz-options').innerHTML = '<div class="col-span-full text-red-400 text-center py-10">通信エラーが発生しました。</div>';
+        document.getElementById('quiz-options').innerHTML = '<div class="col-span-full text-red-400 text-center py-10 lg:text-xl">通信エラーが発生しました。</div>';
     }
 }
 
@@ -377,22 +386,22 @@ function renderQuizQuestion(q) {
     if (q.imageUrl) {
         if (q.imageUrl.includes('/spell/')) {
             imgContainer.classList.add('hidden');
-            questionTitle.innerHTML = `<img src="${q.imageUrl}" class="w-10 h-10 sm:w-12 sm:h-12 rounded-md border border-gray-600 shadow-sm object-cover bg-black shrink-0"><span>${escapeHTML(q.text)}</span>`;
+            questionTitle.innerHTML = `<img src="${q.imageUrl}" class="w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 rounded-lg lg:rounded-xl border border-gray-600 shadow-sm object-cover bg-black shrink-0"><span>${escapeHTML(q.text)}</span>`;
         } else {
             questionTitle.textContent = q.text;
             imgEl.src = q.imageUrl;
             imgContainer.classList.remove('hidden');
 
             if (q.splash && selectedDifficulty === 'HARD') {
-                imgContainer.className = "w-32 h-32 sm:w-48 sm:h-48 overflow-hidden rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.5)] border-2 border-red-500 bg-black mb-3 sm:mb-4 flex justify-center items-center mx-auto relative";
+                imgContainer.className = "w-36 h-36 sm:w-48 sm:h-48 lg:w-64 lg:h-64 overflow-hidden rounded-2xl shadow-[0_0_20px_rgba(239,68,68,0.5)] border-[3px] border-red-500 bg-black mb-4 lg:mb-8 flex justify-center items-center mx-auto relative";
                 imgEl.className = "absolute w-full h-full object-cover transform scale-[5.0] md:scale-[6.0]";
                 const x = Math.floor(Math.random() * 60) + 20;
                 const y = Math.floor(Math.random() * 40) + 30;
                 imgEl.style.transformOrigin = `${x}% ${y}%`;
                 imgEl.style.transform = "";
             } else {
-                imgContainer.className = "w-full flex justify-center mb-3 sm:mb-4 px-2 sm:px-0";
-                imgEl.className = "rounded-lg shadow-lg w-full max-w-[280px] sm:max-w-[400px] aspect-video object-cover border-2 border-gray-700";
+                imgContainer.className = "w-full flex justify-center mb-4 lg:mb-8 px-2 sm:px-0";
+                imgEl.className = "rounded-xl lg:rounded-2xl shadow-lg w-full max-w-[300px] sm:max-w-[450px] lg:max-w-[600px] xl:max-w-[700px] aspect-video object-cover border-[3px] border-gray-700";
                 imgEl.style.transform = "none";
             }
         }
@@ -407,9 +416,9 @@ function renderQuizQuestion(q) {
     const isOnlyImages = q.options.every(opt => opt.imageUrl && !opt.text);
 
     if (isOnlyImages) {
-        optionsContainer.className = "grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 w-full max-w-xl mx-auto";
+        optionsContainer.className = "grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 w-full max-w-2xl lg:max-w-4xl mx-auto";
     } else {
-        optionsContainer.className = "grid grid-cols-1 sm:grid-cols-2 gap-2 w-full";
+        optionsContainer.className = "grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4 w-full";
     }
 
     q.options.forEach(opt => {
@@ -417,17 +426,17 @@ function renderQuizQuestion(q) {
         btn.dataset.optId = opt.optionId;
 
         if (isOnlyImages) {
-            btn.className = 'quiz-option-btn bg-[#1e2328] border-2 border-gray-600 hover:border-gold hover:bg-gold/20 rounded-xl transition-all duration-200 shadow overflow-hidden aspect-square flex items-center justify-center p-1.5 w-full relative';
+            btn.className = 'quiz-option-btn bg-[#1e2328] border-2 lg:border-[3px] border-gray-600 hover:border-gold hover:bg-gold/20 rounded-xl lg:rounded-2xl transition-all duration-200 shadow overflow-hidden aspect-square flex items-center justify-center p-2 lg:p-3 w-full relative';
             btn.innerHTML = `<img src="${opt.imageUrl}" class="w-full h-full object-cover rounded-lg shadow-sm bg-black">`;
         } else {
-            btn.className = 'quiz-option-btn bg-[#1e2328] border-2 border-gray-600 hover:border-gold hover:bg-gold/20 text-gray-200 font-bold py-2 px-2 rounded-lg transition-all duration-200 shadow flex flex-col items-center justify-center gap-1 w-full min-h-[64px]';
+            btn.className = 'quiz-option-btn bg-[#1e2328] border-2 lg:border-[3px] border-gray-600 hover:border-gold hover:bg-gold/20 text-gray-200 font-bold py-2 px-3 lg:py-4 lg:px-4 rounded-xl transition-all duration-200 shadow flex flex-col items-center justify-center gap-2 lg:gap-3 w-full min-h-[70px] lg:min-h-[100px] text-base lg:text-xl xl:text-2xl';
             let content = '';
             if (opt.imageUrl) {
-                const imgSize = opt.text ? 'w-10 h-10 sm:w-12 sm:h-12' : 'w-20 h-20 sm:w-24 sm:h-24';
-                content += `<img src="${opt.imageUrl}" class="${imgSize} rounded-md border border-gray-700 object-cover shrink-0 shadow-sm bg-black">`;
+                const imgSize = opt.text ? 'w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20' : 'w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40';
+                content += `<img src="${opt.imageUrl}" class="${imgSize} rounded-md lg:rounded-xl border border-gray-700 object-cover shrink-0 shadow-sm bg-black">`;
             }
             if (opt.text) {
-                content += `<span class="text-sm sm:text-base leading-tight text-center break-keep">${escapeHTML(opt.text)}</span>`;
+                content += `<span class="leading-tight text-center break-keep">${escapeHTML(opt.text)}</span>`;
             }
             btn.innerHTML = content;
         }
@@ -464,15 +473,15 @@ async function submitQuizAnswer(qId, optId) {
             buttons.forEach(btn => {
                 const isSquare = btn.classList.contains('aspect-square');
                 const baseLayout = isSquare
-                    ? 'quiz-option-btn rounded-xl transition-all duration-300 shadow overflow-hidden aspect-square flex items-center justify-center p-1.5 w-full relative'
-                    : 'quiz-option-btn font-bold py-2 px-2 rounded-lg transition-all duration-300 shadow flex flex-col items-center justify-center gap-1 w-full min-h-[64px]';
+                    ? 'quiz-option-btn rounded-xl lg:rounded-2xl transition-all duration-300 shadow overflow-hidden aspect-square flex items-center justify-center p-2 lg:p-3 w-full relative'
+                    : 'quiz-option-btn font-bold py-2 px-3 lg:py-4 lg:px-4 rounded-xl transition-all duration-300 shadow flex flex-col items-center justify-center gap-2 lg:gap-3 w-full min-h-[70px] lg:min-h-[100px] text-base lg:text-xl xl:text-2xl';
 
                 if (btn.dataset.optId === result.correctOptionId) {
-                    btn.className = `${baseLayout} bg-emerald-600/40 border-[3px] border-emerald-500 text-white`;
+                    btn.className = `${baseLayout} bg-emerald-600/40 border-[3px] lg:border-[4px] border-emerald-500 text-white`;
                 } else if (btn.dataset.optId === optId) {
-                    btn.className = `${baseLayout} bg-red-600/40 border-[3px] border-red-500 text-white`;
+                    btn.className = `${baseLayout} bg-red-600/40 border-[3px] lg:border-[4px] border-red-500 text-white`;
                 } else {
-                    btn.className = `${baseLayout} bg-[#1e2328] border-2 border-gray-600 opacity-40`;
+                    btn.className = `${baseLayout} bg-[#1e2328] border-2 lg:border-[3px] border-gray-600 opacity-40`;
                 }
             });
 
@@ -486,7 +495,16 @@ async function submitQuizAnswer(qId, optId) {
             if (result.correct) {
                 playStreakAnimation(result.currentStreak);
                 const waitTime = result.currentStreak >= 3 ? 1500 : 1000;
-                setTimeout(fetchNextQuestion, waitTime);
+
+                if (result.currentStreak >= 3) {
+                    // アニメーション終了後に次の問題を表示
+                    setTimeout(() => {
+                        clearStreakAnimation();
+                        setTimeout(fetchNextQuestion, 300);
+                    }, waitTime);
+                } else {
+                    setTimeout(fetchNextQuestion, waitTime);
+                }
             } else {
                 if (result.gameOver) {
                     setTimeout(() => showGameOver(result.currentScore, result.explanation), 2000);
@@ -502,38 +520,64 @@ async function submitQuizAnswer(qId, optId) {
 
 let streakTimeout = null;
 
+// ストリーク演出処理（3連続正解以上で発動）
 function playStreakAnimation(streak) {
     let text = "";
 
-    if (streak === 3) { text = "キリングスプリー"; }
-    else if (streak === 4) { text = "ランページ"; }
-    else if (streak === 5) { text = "アンストッパブル"; }
-    else if (streak === 6) { text = "ドミネーティング"; }
-    else if (streak === 7) { text = "ゴッドライク"; }
-    else if (streak >= 8) { text = "レジェンダリー"; }
+    if (streak === 3) { text = "KILLING SPREE"; }
+    else if (streak === 4) { text = "RAMPAGE"; }
+    else if (streak === 5) { text = "UNSTOPPABLE"; }
+    else if (streak === 6) { text = "DOMINATING"; }
+    else if (streak === 7) { text = "GODLIKE"; }
+    else if (streak >= 8) { text = "LEGENDARY"; }
 
     if (text) {
         const livesContainer = document.getElementById('quiz-header-lives-container');
         const streakContainer = document.getElementById('streak-text-container');
-        const textEl = document.getElementById('streak-text');
+        const headerTextEl = document.getElementById('header-streak-text');
         const lineEl = document.getElementById('streak-underline');
+        const bgEl = document.getElementById('streak-bg');
 
-        textEl.textContent = text;
+        if (headerTextEl) headerTextEl.textContent = text;
 
-        livesContainer.classList.add('opacity-0');
+        if (livesContainer) livesContainer.classList.add('opacity-0');
+
         setTimeout(() => {
-            livesContainer.classList.add('hidden');
-            streakContainer.classList.remove('hidden');
+            if (livesContainer) livesContainer.classList.add('hidden');
+            if (streakContainer) streakContainer.classList.remove('hidden');
 
-            textEl.classList.remove('animate-streak-slide-out');
-            lineEl.classList.remove('animate-streak-line-shrink');
-            textEl.classList.remove('animate-streak-slide-in');
-            lineEl.classList.remove('animate-streak-line-expand');
+            // 表示順序の設定
+            const scoreDiv = document.querySelector('.text-left.flex.flex-col');
+            if (scoreDiv) { scoreDiv.style.position = 'relative'; scoreDiv.style.zIndex = '50'; }
 
-            void textEl.offsetWidth;
+            const rightStreakDiv = document.querySelector('.text-right.flex.flex-col');
+            if (rightStreakDiv) { rightStreakDiv.style.position = 'relative'; rightStreakDiv.style.zIndex = '10'; }
 
-            textEl.classList.add('animate-streak-slide-in');
-            lineEl.classList.add('animate-streak-line-expand');
+            if (streakContainer) { streakContainer.style.zIndex = '30'; }
+
+            // アニメーションの初期状態をセット
+            const elementsToAnimate = [headerTextEl, lineEl, bgEl];
+
+            elementsToAnimate.forEach(el => {
+                if (el) {
+                    el.style.transition = 'none';
+                    el.style.transform = 'translateX(-80px)';
+                    el.style.opacity = '0';
+                }
+            });
+
+            // リフロー
+            if (headerTextEl) void headerTextEl.offsetWidth;
+
+            // 中央へスライドイン
+            elementsToAnimate.forEach(el => {
+                if (el) {
+                    el.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    el.style.transform = 'translateX(0)';
+                    el.style.opacity = '1';
+                }
+            });
+
         }, 150);
     }
 }
@@ -541,22 +585,28 @@ function playStreakAnimation(streak) {
 function clearStreakAnimation() {
     const livesContainer = document.getElementById('quiz-header-lives-container');
     const streakContainer = document.getElementById('streak-text-container');
-    const textEl = document.getElementById('streak-text');
+    const headerTextEl = document.getElementById('header-streak-text');
     const lineEl = document.getElementById('streak-underline');
+    const bgEl = document.getElementById('streak-bg');
 
-    if (!streakContainer.classList.contains('hidden')) {
-        textEl.classList.remove('animate-streak-slide-in');
-        lineEl.classList.remove('animate-streak-line-expand');
+    if (streakContainer && !streakContainer.classList.contains('hidden')) {
+        // 右側へスライドアウト
+        const elementsToAnimate = [headerTextEl, lineEl, bgEl];
 
-        void textEl.offsetWidth;
-
-        textEl.classList.add('animate-streak-slide-out');
-        lineEl.classList.add('animate-streak-line-shrink');
+        elementsToAnimate.forEach(el => {
+            if (el) {
+                el.style.transition = 'all 0.3s ease-in';
+                el.style.transform = 'translateX(80px)';
+                el.style.opacity = '0';
+            }
+        });
 
         setTimeout(() => {
-            streakContainer.classList.add('hidden');
-            livesContainer.classList.remove('hidden');
-            setTimeout(() => livesContainer.classList.remove('opacity-0'), 50);
+            if (streakContainer) streakContainer.classList.add('hidden');
+            if (livesContainer) {
+                livesContainer.classList.remove('hidden');
+                setTimeout(() => livesContainer.classList.remove('opacity-0'), 50);
+            }
         }, 300);
     }
 }
@@ -591,7 +641,7 @@ function showGameOver(finalScore, explanation) {
 
     const rankTextEl = document.getElementById('quiz-rank-text');
     rankTextEl.textContent = rank;
-    rankTextEl.className = `lol-title text-4xl sm:text-5xl font-black drop-shadow-xl tracking-wider ${rankColors[rank]}`;
+    rankTextEl.className = `lol-title text-[clamp(2rem,6vw,4rem)] font-black drop-shadow-xl tracking-wider ${rankColors[rank]}`;
 
     const rankImgEl = document.getElementById('quiz-rank-img');
     rankImgEl.src = `/img/ranks/emblem-${rank.toLowerCase()}.png`;
@@ -606,21 +656,20 @@ function renderChampionGrid(championsToRender) {
     const grid = document.getElementById('champion-grid');
     grid.innerHTML = '';
     if (championsToRender.length === 0) {
-        grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 font-bold">条件に一致するチャンピオンが見つかりません。</div>';
+        grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 font-bold lg:text-lg">条件に一致するチャンピオンが見つかりません。</div>';
         return;
     }
     championsToRender.forEach(champ => {
         const card = document.createElement('div');
         card.className = 'bg-panel border border-gray-700 rounded-lg overflow-hidden cursor-pointer hover:border-gold hover:scale-[1.03] transition-all duration-200 shadow-lg relative group';
-        // クリック時に統合された正しい openModal を呼ぶ
         card.onclick = () => openModal(champ.id);
 
         card.innerHTML = `
             <div class="relative pt-[100%]">
                 <img src="${escapeHTML(champ.imagePath)}" alt="${escapeHTML(champ.name)}" class="absolute top-0 left-0 w-full h-full object-cover">
             </div>
-            <div class="p-2 sm:p-3">
-                <h3 class="lol-title text-white text-sm sm:text-base font-bold truncate tracking-wide text-center">${escapeHTML(champ.name)}</h3>
+            <div class="p-3 lg:p-4">
+                <h3 class="lol-title text-white text-sm sm:text-base lg:text-lg font-bold truncate tracking-wide text-center">${escapeHTML(champ.name)}</h3>
             </div>
         `;
         grid.appendChild(card);
@@ -681,9 +730,9 @@ function updateActiveFiltersUI() {
     for (const [type, set] of Object.entries(activeFilters)) {
         set.forEach(val => {
             const badge = document.createElement('div');
-            badge.className = `flex items-center gap-1.5 border bg-black bg-opacity-50 px-2.5 py-0.5 rounded-full text-xs font-semibold backdrop-blur-sm cursor-pointer transition-colors ${colors[type]}`;
+            badge.className = `flex items-center gap-1.5 border bg-black bg-opacity-50 px-3 py-1 lg:px-4 lg:py-1.5 rounded-full text-xs lg:text-sm font-semibold backdrop-blur-sm cursor-pointer transition-colors ${colors[type]}`;
             const labelText = JpMap[type][val] || val;
-            badge.innerHTML = `<span>${labelText}</span><span class="text-sm leading-none mb-0.5">&times;</span>`;
+            badge.innerHTML = `<span>${labelText}</span><span class="text-sm lg:text-base leading-none mb-0.5">&times;</span>`;
 
             badge.onclick = () => {
                 activeFilters[type].delete(val);
@@ -733,21 +782,32 @@ function openModal(champId) {
     const nameEl = document.getElementById('modal-name');
     if (nameEl) {
         nameEl.textContent = champ.name;
-        // 【修正】文字数に応じて文字サイズを動的に調整し、常に1行に収める
         const nameLength = champ.name.length;
-        if (nameLength >= 10) {
-            // 10文字以上 (例: ツイステッド・フェイト) -> かなり小さめ
-            nameEl.style.fontSize = 'clamp(1.4rem, 3.5vw, 2.2rem)';
-        } else if (nameLength >= 7) {
-            // 7文字以上 (例: レナータ・グラスク) -> 少し小さめ
-            nameEl.style.fontSize = 'clamp(1.7rem, 4.2vw, 2.8rem)';
+
+        if (nameLength >= 13) {
+            nameEl.style.fontSize = 'clamp(1.0rem, 2.0vw, 1.9rem)';
+        } else if (nameLength === 12) {
+            nameEl.style.fontSize = 'clamp(1.1rem, 2.2vw, 2.1rem)';
+        } else if (nameLength === 11) {
+            nameEl.style.fontSize = 'clamp(1.2rem, 2.4vw, 2.3rem)';
+        } else if (nameLength === 10) {
+            nameEl.style.fontSize = 'clamp(1.3rem, 2.6vw, 2.6rem)';
+        } else if (nameLength === 9) {
+            nameEl.style.fontSize = 'clamp(1.4rem, 2.8vw, 2.9rem)';
+        } else if (nameLength === 8) {
+            nameEl.style.fontSize = 'clamp(1.5rem, 3.3vw, 3.2rem)';
+        } else if (nameLength === 7) {
+            nameEl.style.fontSize = 'clamp(1.6rem, 3.8vw, 3.7rem)';
+        } else if (nameLength === 6) {
+            nameEl.style.fontSize = 'clamp(1.8rem, 4.3vw, 4.3rem)';
+        } else if (nameLength === 5) {
+            nameEl.style.fontSize = 'clamp(2.0rem, 5.0vw, 5.0rem)';
         } else {
-            // 通常 (例: アーリ) -> 大きくドカンと
-            nameEl.style.fontSize = 'clamp(2.2rem, 5vw, 3.5rem)';
+            // 1〜5文字
+            nameEl.style.fontSize = 'clamp(2.2rem, 5.5vw, 5.5rem)';
         }
     }
 
-    // タグの色分け（2行に分割）
     const line1 = document.getElementById('modal-tags-line1');
     const line2 = document.getElementById('modal-tags-line2');
     if (line1) line1.innerHTML = '';
@@ -756,25 +816,25 @@ function openModal(champId) {
     if (champ.roles && line1) {
         champ.roles.forEach(role => {
             const roleName = JpMap.roles[role] || role;
-            line1.innerHTML += `<span class="bg-[#c8aa6e]/20 text-[#c8aa6e] px-2 py-1 rounded text-xs font-bold border border-[#c8aa6e] shadow-sm">${roleName}</span>`;
+            line1.innerHTML += `<span class="bg-[#c8aa6e]/20 text-[#c8aa6e] px-2 py-1 lg:px-3 lg:py-1.5 rounded text-xs lg:text-sm xl:text-base font-bold border border-[#c8aa6e] shadow-sm">${roleName}</span>`;
         });
     }
     if (champ.lanes && line1) {
         champ.lanes.forEach(lane => {
             const laneName = JpMap.lanes[lane] || lane;
-            line1.innerHTML += `<span class="bg-gray-600/20 text-gray-300 px-2 py-1 rounded text-xs font-bold border border-gray-500 shadow-sm">${laneName}</span>`;
+            line1.innerHTML += `<span class="bg-gray-600/20 text-gray-300 px-2 py-1 lg:px-3 lg:py-1.5 rounded text-xs lg:text-sm xl:text-base font-bold border border-gray-500 shadow-sm">${laneName}</span>`;
         });
     }
     if (champ.regions && line2) {
         champ.regions.forEach(region => {
             const regionName = JpMap.regions[region] || region;
-            line2.innerHTML += `<span class="bg-emerald-600/20 text-emerald-400 px-2 py-1 rounded text-xs font-bold border border-emerald-600 shadow-sm">${regionName}</span>`;
+            line2.innerHTML += `<span class="bg-emerald-600/20 text-emerald-400 px-2 py-1 lg:px-3 lg:py-1.5 rounded text-xs lg:text-sm xl:text-base font-bold border border-emerald-600 shadow-sm">${regionName}</span>`;
         });
     }
     if (champ.visuals && line2) {
         champ.visuals.forEach(visual => {
             if (JpMap.races && JpMap.races[visual]) {
-                line2.innerHTML += `<span class="bg-purple-600/20 text-purple-400 px-2 py-1 rounded text-xs font-bold border border-purple-600 shadow-sm">${JpMap.races[visual]}</span>`;
+                line2.innerHTML += `<span class="bg-purple-600/20 text-purple-400 px-2 py-1 lg:px-3 lg:py-1.5 rounded text-xs lg:text-sm xl:text-base font-bold border border-purple-600 shadow-sm">${JpMap.races[visual]}</span>`;
             }
         });
     }
@@ -785,7 +845,6 @@ function openModal(champId) {
     const rangeEl = document.getElementById('modal-range');
     if (rangeEl) rangeEl.textContent = champ.rangeType === 'Ranged' ? '遠隔' : '近接';
 
-    // 【修正】リソースと星(★)評価の難易度を復元
     const resourceEl = document.getElementById('modal-resource');
     if (resourceEl) resourceEl.textContent = champ.resourceType || 'なし';
 
@@ -802,8 +861,7 @@ function openModal(champId) {
         if (champ.spells && champ.spells.length > 0) {
             champ.spells.forEach((spell, index) => {
                 const btn = document.createElement('button');
-                // アイコンを大きくし、枠線が見切れないように padding (p-0.5) を入れて内側に配置
-                const baseClass = "w-14 h-14 sm:w-16 sm:h-16 rounded-md border-[3px] overflow-hidden shrink-0 transition-all p-0.5 bg-black";
+                const baseClass = "w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 xl:w-24 xl:h-24 rounded-md border-[3px] overflow-hidden shrink-0 transition-all p-0.5 bg-black";
                 btn.className = `${baseClass} ${index === 0 ? 'border-gold scale-110 shadow-[0_0_10px_rgba(200,170,110,0.6)]' : 'border-gray-700 opacity-60 hover:opacity-100 hover:border-gray-400'}`;
                 btn.innerHTML = `<img src="${spell.imagePath}" class="w-full h-full object-cover rounded-sm">`;
 
@@ -815,7 +873,6 @@ function openModal(champId) {
 
                     document.getElementById('modal-skill-slot').textContent = spell.slot;
                     document.getElementById('modal-skill-name').textContent = spell.name;
-                    // 【修正】無駄に連続する改行タグ（空行）を検知し、適度な高さの隙間（h-3）に置き換えて見やすくする
                     document.getElementById('modal-skill-desc').innerHTML = spell.description.replace(/(<br\s*\/?>\s*){2,}/gi, '<br><span class="block h-3"></span>');
                 };
                 skillsContainer.appendChild(btn);
@@ -823,7 +880,6 @@ function openModal(champId) {
 
             document.getElementById('modal-skill-slot').textContent = champ.spells[0].slot;
             document.getElementById('modal-skill-name').textContent = champ.spells[0].name;
-            // 【修正】初期表示時も同様に空行を最適化
             document.getElementById('modal-skill-desc').innerHTML = champ.spells[0].description.replace(/(<br\s*\/?>\s*){2,}/gi, '<br><span class="block h-3"></span>');
         }
     }
@@ -844,14 +900,11 @@ function closeModal() {
 }
 
 function openSplashModal() {
-    // 保存しておいた現在表示中のチャンピオンIDを使う
     if (!currentModalChampId) return;
     const champ = allChampions.find(c => c.id === currentModalChampId);
     if (!champ) return;
 
-    // スプラッシュアート画像（横長）の設定
     const splashImg = document.getElementById('splash-img');
-    // もし古いHTMLの splash-modal-img になっている環境でも動くように両方チェック
     const targetImg = splashImg || document.getElementById('splash-modal-img');
 
     if (targetImg) {
@@ -884,13 +937,11 @@ function closeSplashModal() {
     }
 }
 
-// 【NEW】結果画面から直接スプラッシュアートを開くための関数
 function openSplashFromResult(champId) {
     currentModalChampId = champId;
     openSplashModal();
 }
 
-// ESCキーでモーダルを閉じる
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closeModal();

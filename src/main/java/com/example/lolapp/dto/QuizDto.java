@@ -26,9 +26,9 @@ public class QuizDto {
     public static class QuestionDto {
         private String questionId;
         private String text;
-        private String imageUrl; // 画像がない場合はnull
+        private String imageUrl;
         private List<OptionDto> options;
-        private boolean isSplash; // フロントエンドでのHardモード画像ズーム判定用
+        private boolean isSplash;
     }
 
     @Data
@@ -37,7 +37,7 @@ public class QuizDto {
     public static class OptionDto {
         private String optionId;
         private String text;
-        private String imageUrl; // 【追加】選択肢のボタンに画像を含めるため
+        private String imageUrl;
     }
 
     @Data
@@ -56,7 +56,7 @@ public class QuizDto {
         private int currentScore;
         private int currentStreak;
         private String explanation;
-        private int remainingLives; // 追加: 残りライフ
-        private boolean gameOver; // 追加: ゲームオーバー判定
+        private int remainingLives;
+        private boolean gameOver;
     }
 }

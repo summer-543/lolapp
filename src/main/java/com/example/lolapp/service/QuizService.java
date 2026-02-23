@@ -88,7 +88,7 @@ public class QuizService {
                 break;
             case 10:
                 q = createNormalChampionIconQuestion(target, allChamps, qId);
-                break; // 【NEW】アイコン当て
+                break;
             case 20:
                 q = createNormalSpellQuestion1(target, allChamps, qId);
                 break;
@@ -126,7 +126,7 @@ public class QuizService {
         boolean isCorrect = q.correctOptionId.equals(request.getSelectedOptionId());
 
         if (isCorrect) {
-            sessionData.score += 10; // 【修正】1問10点に
+            sessionData.score += 10;
             sessionData.streak++;
         } else {
             sessionData.streak = 0;
@@ -164,9 +164,9 @@ public class QuizService {
 
     private int getVisualQuestionType(String difficulty) {
         if ("HARD".equals(difficulty)) {
-            return 0; // HARDはスプラッシュ極限ズームのみ
+            return 0;
         } else {
-            return rand.nextInt(2) == 0 ? 0 : 10; // NORMALはスプラッシュかアイコン選択(10)
+            return rand.nextInt(2) == 0 ? 0 : 10;
         }
     }
 
@@ -205,7 +205,6 @@ public class QuizService {
         return wrongs;
     }
 
-    // 【NEW】アイコン選択問題
     private QuizQuestionInternal createNormalChampionIconQuestion(ChampionDto target, List<ChampionDto> all,
             String id) {
         String correctImg = (target.getTilePath() != null && !target.getTilePath().isEmpty()) ? target.getTilePath()
@@ -235,7 +234,6 @@ public class QuizService {
                         s.get("champName") + " の " + s.get("slot"), null))
                 .collect(Collectors.toList());
 
-        // 【修正】スキル名を「」で囲むように変更
         return buildInternalOptions(id, "「" + spell.get("name") + "」は、誰のどのスキル？", (String) spell.get("imagePath"),
                 correctOpt, wrongOpts, "");
     }
@@ -297,7 +295,6 @@ public class QuizService {
                 .map(s -> new QuizDto.OptionDto(UUID.randomUUID().toString(), null, (String) s.get("imagePath")))
                 .collect(Collectors.toList());
 
-        // 【修正】「スキル名」という単語を削除
         return buildInternalOptions(id, "「" + spell.get("name") + "」のアイコンはどれ？", null, correctOpt, wrongOpts, "");
     }
 

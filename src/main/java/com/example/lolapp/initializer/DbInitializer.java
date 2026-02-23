@@ -13,9 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * CSVファイルからデータベースに初期データをインポートするクラス。
- */
+//CSVファイルからデータベースに初期データをインポートするクラス
 @Component
 public class DbInitializer implements CommandLineRunner {
 

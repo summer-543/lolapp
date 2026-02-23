@@ -18,9 +18,7 @@ public class ChampionService {
         this.championRepository = championRepository;
     }
 
-    /**
-     * 全チャンピオンを取得し、DTOに変換して返す
-     */
+    // 全チャンピオンを取得し、DTOに変換して返す
     @Transactional(readOnly = true)
     public List<ChampionDto> getAllChampions() {
         return championRepository.findAll().stream()
@@ -28,9 +26,7 @@ public class ChampionService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * IDで特定のチャンピオンを検索し、DTOに変換して返す
-     */
+    // IDで特定のチャンピオンを検索し、DTOに変換して返す
     @Transactional(readOnly = true)
     public ChampionDto getChampionById(Long id) {
         Champion champion = championRepository.findById(id)

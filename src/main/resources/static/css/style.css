@@ -42,80 +42,8 @@
     background: #f0e6d2;
 }
 
-/* 【修正】ここにあった .scrollbar-role などの色分け設定を削除します。HTML側に統一します */
-
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
-}
-
-/* --- ストリーク演出用アニメーション（左からスライドイン） --- */
-.animate-streak-slide-in {
-    animation: streakSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-@keyframes streakSlideIn {
-    0% {
-        transform: translateX(-40px) skewX(-15deg);
-        opacity: 0;
-        filter: brightness(2);
-    }
-
-    100% {
-        transform: translateX(0) skewX(0);
-        opacity: 1;
-        filter: brightness(1);
-    }
-}
-
-/* --- 【NEW】ストリーク演出用アニメーション（右へスライドアウトして消える） --- */
-.animate-streak-slide-out {
-    animation: streakSlideOut 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
-}
-
-@keyframes streakSlideOut {
-    0% {
-        transform: translateX(0) skewX(0);
-        opacity: 1;
-    }
-
-    100% {
-        transform: translateX(40px) skewX(15deg);
-        opacity: 0;
-    }
-}
-
-/* --- 下線用アニメーション（中央から左右へシュッと広がる） --- */
-.animate-streak-line-expand {
-    animation: streakLineExpand 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
-
-@keyframes streakLineExpand {
-    0% {
-        transform: scaleX(0);
-        opacity: 0;
-    }
-
-    100% {
-        transform: scaleX(1);
-        opacity: 1;
-    }
-}
-
-/* --- 【NEW】下線用アニメーション（スッと消える） --- */
-.animate-streak-line-shrink {
-    animation: streakLineShrink 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
-}
-
-@keyframes streakLineShrink {
-    0% {
-        transform: scaleX(1);
-        opacity: 1;
-    }
-
-    100% {
-        transform: scaleX(0);
-        opacity: 0;
-    }
 }
 
 /* ゴールドグラデーション文字 */
@@ -123,7 +51,7 @@
     background: linear-gradient(to bottom, #fef0d5 0%, #d4af37 40%, #8a6a27 100%);
     -webkit-background-clip: text;
     background-clip: text;
-    /* 互換性のため標準プロパティを追加 */
+    /* 互換性用 */
     -webkit-text-fill-color: transparent;
     color: #d4af37;
     /* Fallback */

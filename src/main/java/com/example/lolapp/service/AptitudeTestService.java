@@ -53,7 +53,7 @@ public class AptitudeTestService {
                 }
 
                 if (isMatch) {
-                    // ビジュアル・雰囲気系の質問は配点を高くする（フロントエンドの仕様を継承）
+                    // ビジュアル・雰囲気系の質問は配点を高くする
                     double points = type.startsWith("visuals") ? 1.5 : 1.0;
                     score += points;
                 }
