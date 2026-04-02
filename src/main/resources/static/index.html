@@ -114,18 +114,16 @@
 
     <header
         class="bg-[#09101d] border-b border-[#c8aa6e] py-3 sm:py-4 px-4 md:px-8 lg:px-[5%] xl:px-[8%] sticky top-0 z-40 shadow-lg shrink-0">
-        <!-- スマホ時は縦並び、PC時は横並びに変更 -->
-        <div class="w-full mx-auto flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
-            <h1 class="lol-title text-xl sm:text-2xl font-bold text-gold cursor-pointer hover:text-white transition tracking-wide text-center"
+        <div class="w-full mx-auto flex justify-between items-center">
+            <h1 class="lol-title text-xl sm:text-2xl font-bold text-gold cursor-pointer hover:text-white transition tracking-wide"
                 onclick="switchView('home-view')">
                 LoL DB & Quiz
             </h1>
-            <nav
-                class="text-xs sm:text-sm md:text-base font-medium flex flex-wrap justify-center sm:justify-end gap-x-3 gap-y-1">
-                <button onclick="switchView('home-view')" class="hover:text-gold transition">ホーム</button>
-                <button onclick="switchView('champions-view')" class="hover:text-gold transition">チャンピオン図鑑</button>
-                <button onclick="startTest()" class="hover:text-gold transition">適正診断テスト</button>
-                <button onclick="switchView('quiz-setup-view')" class="hover:text-gold transition">知識クイズ</button>
+            <nav class="text-sm sm:text-base font-medium">
+                <button onclick="switchView('home-view')" class="mx-2 hover:text-gold transition">ホーム</button>
+                <button onclick="switchView('champions-view')" class="mx-2 hover:text-gold transition">チャンピオン図鑑</button>
+                <button onclick="startTest()" class="mx-2 hover:text-gold transition">適正診断テスト</button>
+                <button onclick="switchView('quiz-setup-view')" class="mx-2 hover:text-gold transition">知識クイズ</button>
             </nav>
         </div>
     </header>
@@ -187,18 +185,15 @@
                         class="lol-title text-2xl sm:text-3xl lg:text-4xl font-bold text-gold tracking-wider shrink-0 mt-1">
                         チャンピオン図鑑</h2>
                     <div class="flex flex-col items-end gap-2 w-full lg:w-auto font-medium">
-                        <!-- スマホ時はグリッド(2列)、PC時はflexにする修正 -->
-                        <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 w-full justify-end">
-                            <div class="col-span-2 sm:col-span-1 w-full sm:w-auto">
-                                <input type="text" id="search-input" placeholder="名前で検索..."
-                                    class="bg-panel border border-gold text-white px-3 py-1.5 lg:py-2 lg:px-4 rounded focus:outline-none focus:ring-2 focus:ring-[#c8aa6e] w-full sm:w-48 lg:w-64 placeholder-gray-500 text-sm lg:text-base transition-shadow">
-                            </div>
+                        <div class="flex flex-wrap gap-2 w-full justify-end">
+                            <input type="text" id="search-input" placeholder="名前で検索..."
+                                class="bg-panel border border-gold text-white px-3 py-1.5 lg:py-2 lg:px-4 rounded focus:outline-none focus:ring-2 focus:ring-[#c8aa6e] w-full sm:w-48 lg:w-64 placeholder-gray-500 text-sm lg:text-base transition-shadow">
 
-                            <div class="relative w-full sm:w-36 lg:w-40 custom-dropdown" data-type="role">
+                            <div class="relative flex-1 sm:flex-none sm:w-36 lg:w-40 custom-dropdown" data-type="role">
                                 <button type="button"
-                                    class="w-full bg-panel border border-gold text-gray-500 px-3 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#c8aa6e] text-xs sm:text-sm lg:text-base text-left flex justify-between items-center transition-shadow">
-                                    <span class="truncate pr-1">ロールを選択</span>
-                                    <svg class="w-3.5 h-3.5 text-gray-500 shrink-0 pointer-events-none" fill="none"
+                                    class="w-full bg-panel border border-gold text-gray-500 px-3 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#c8aa6e] text-sm lg:text-base text-left flex justify-between items-center transition-shadow">
+                                    <span>ロールを選択</span>
+                                    <svg class="w-3.5 h-3.5 text-gray-500 pointer-events-none" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7"></path>
@@ -221,11 +216,11 @@
                                 </ul>
                             </div>
 
-                            <div class="relative w-full sm:w-36 lg:w-40 custom-dropdown" data-type="lane">
+                            <div class="relative flex-1 sm:flex-none sm:w-36 lg:w-40 custom-dropdown" data-type="lane">
                                 <button type="button"
-                                    class="w-full bg-panel border border-gray-500 text-gray-500 px-3 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-400 text-xs sm:text-sm lg:text-base text-left flex justify-between items-center transition-shadow">
-                                    <span class="truncate pr-1">レーンを選択</span>
-                                    <svg class="w-3.5 h-3.5 text-gray-500 shrink-0 pointer-events-none" fill="none"
+                                    class="w-full bg-panel border border-gray-500 text-gray-500 px-3 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-400 text-sm lg:text-base text-left flex justify-between items-center transition-shadow">
+                                    <span>レーンを選択</span>
+                                    <svg class="w-3.5 h-3.5 text-gray-500 pointer-events-none" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7"></path>
@@ -246,11 +241,12 @@
                                 </ul>
                             </div>
 
-                            <div class="relative w-full sm:w-36 lg:w-40 custom-dropdown" data-type="region">
+                            <div class="relative flex-1 sm:flex-none sm:w-36 lg:w-40 custom-dropdown"
+                                data-type="region">
                                 <button type="button"
-                                    class="w-full bg-panel border border-emerald-700 text-gray-500 px-3 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs sm:text-sm lg:text-base text-left flex justify-between items-center transition-shadow">
-                                    <span class="truncate pr-1">地域を選択</span>
-                                    <svg class="w-3.5 h-3.5 text-gray-500 shrink-0 pointer-events-none" fill="none"
+                                    class="w-full bg-panel border border-emerald-700 text-gray-500 px-3 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm lg:text-base text-left flex justify-between items-center transition-shadow">
+                                    <span>地域を選択</span>
+                                    <svg class="w-3.5 h-3.5 text-gray-500 pointer-events-none" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7"></path>
@@ -289,11 +285,11 @@
                                 </ul>
                             </div>
 
-                            <div class="relative w-full sm:w-36 lg:w-40 custom-dropdown" data-type="race">
+                            <div class="relative flex-1 sm:flex-none sm:w-36 lg:w-40 custom-dropdown" data-type="race">
                                 <button type="button"
-                                    class="w-full bg-panel border border-purple-700 text-gray-500 px-3 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 text-xs sm:text-sm lg:text-base text-left flex justify-between items-center transition-shadow">
-                                    <span class="truncate pr-1">種族を選択</span>
-                                    <svg class="w-3.5 h-3.5 text-gray-500 shrink-0 pointer-events-none" fill="none"
+                                    class="w-full bg-panel border border-purple-700 text-gray-500 px-3 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm lg:text-base text-left flex justify-between items-center transition-shadow">
+                                    <span>種族を選択</span>
+                                    <svg class="w-3.5 h-3.5 text-gray-500 pointer-events-none" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7"></path>
@@ -341,8 +337,7 @@
                             </div>
                         </div>
                         <div id="active-filters-container"
-                            class="flex flex-wrap justify-end gap-2 min-h-[24px] lg:min-h-[28px] w-full mt-2 lg:mt-0">
-                        </div>
+                            class="flex flex-wrap justify-end gap-2 min-h-[24px] lg:min-h-[28px] w-full"></div>
                     </div>
                 </div>
 
@@ -406,9 +401,8 @@
                     <p class="text-gray-300 text-sm sm:text-base lg:text-lg text-center font-medium">あなたにおすすめのチャンピオン</p>
                 </div>
 
-                <!-- スマホ時(flex-col)は中央揃え(items-center)、PC時(md:flex-row)は下揃え(md:items-end)にしてズレを修正 -->
                 <div id="result-champions-container"
-                    class="flex flex-col md:flex-row justify-center items-center md:items-end gap-6 md:gap-3 lg:gap-4 w-full max-w-[1100px] mb-6 lg:mb-10 shrink">
+                    class="flex flex-col md:flex-row justify-center items-end gap-2 md:gap-3 lg:gap-4 w-full max-w-[1100px] mb-6 lg:mb-10 shrink">
                     <!-- JSで動的生成 -->
                 </div>
 
@@ -420,7 +414,7 @@
         </div>
 
         <!-- ============================================== -->
-        <!-- 5. LoLクイズ 設定画面 -->
+        <!-- 4.5 LoLクイズ 設定画面 -->
         <!-- ============================================== -->
         <div id="quiz-setup-view"
             class="absolute inset-0 bg-[#0a1428] hidden opacity-0 transition-opacity duration-300 overflow-y-auto z-10">
@@ -463,7 +457,7 @@
         </div>
 
         <!-- ============================================== -->
-        <!-- 6. LoLクイズ 実行画面 (エンドレス版) -->
+        <!-- 5. LoLクイズ 実行画面 (エンドレス版) -->
         <!-- ============================================== -->
         <div id="quiz-view"
             class="absolute inset-0 bg-[#0a1428] hidden opacity-0 transition-opacity duration-300 overflow-y-auto z-10">
@@ -543,7 +537,7 @@
         </div>
 
         <!-- ============================================== -->
-        <!-- 7. LoLクイズ 結果(ゲームオーバー)画面 -->
+        <!-- 6. LoLクイズ 結果(ゲームオーバー)画面 -->
         <!-- ============================================== -->
         <div id="quiz-result-view"
             class="absolute inset-0 bg-[#0a1428] hidden opacity-0 transition-opacity duration-300 z-10 overflow-y-auto">
@@ -608,10 +602,10 @@
         <div
             class="relative w-[95vw] md:w-[90vw] lg:w-[85vw] xl:w-[80vw] max-w-[1200px] xl:max-w-[1400px] bg-[#0a1428] border border-gold/40 rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden h-[92vh] md:h-[85vh]">
             <button onclick="closeModal()"
-                class="absolute top-2 right-2 sm:top-5 sm:right-5 text-gray-400 hover:text-white z-30 text-3xl sm:text-4xl font-light leading-none drop-shadow-md transition-colors bg-black/40 md:bg-transparent rounded-full w-10 h-10 flex items-center justify-center">&times;</button>
+                class="absolute top-4 right-4 sm:top-5 sm:right-5 text-gray-400 hover:text-white z-30 text-3xl sm:text-4xl font-light leading-none drop-shadow-md transition-colors bg-black/30 md:bg-transparent rounded-full w-10 h-10 flex items-center justify-center">&times;</button>
 
-            <!-- 画像エリアの高さをスマホでは少し抑える(h-[35%]) -->
-            <div class="w-full md:w-[38%] relative bg-black cursor-pointer group shrink-0 h-[35%] md:h-full"
+            <!-- 【修正】スマホ時の高さを50%に拡大し、縦長画像の見切れを減らしました -->
+            <div class="w-full md:w-[38%] relative bg-black cursor-pointer group shrink-0 h-[50%] md:h-full"
                 onclick="openSplashModal()">
                 <img id="modal-bg-img" src=""
                     class="absolute inset-0 w-full h-full object-cover object-top opacity-85 group-hover:opacity-100 transition-opacity duration-500">
@@ -623,86 +617,84 @@
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </div>
-                <!-- パディングをスマホ時は小さく(p-3 sm:p-6)して、文字がはみ出さないように -->
                 <div
-                    class="absolute inset-0 bg-gradient-to-t from-[#041016] via-[#041016]/80 to-transparent flex flex-col justify-end p-3 sm:p-6 lg:p-10 xl:p-12 text-left z-20 overflow-hidden">
+                    class="absolute inset-0 bg-gradient-to-t from-[#041016] via-[#041016]/80 to-transparent flex flex-col justify-end p-5 sm:p-8 lg:p-10 xl:p-12 text-left z-20 overflow-hidden">
                     <p id="modal-title"
-                        class="text-gold text-xs sm:text-sm lg:text-2xl xl:text-3xl font-bold tracking-[0.2em] drop-shadow-md mb-1 lg:mb-3"
+                        class="text-gold text-base sm:text-lg lg:text-2xl xl:text-3xl font-bold tracking-[0.2em] drop-shadow-md mb-1.5 lg:mb-3"
                         style="font-family: 'Noto Serif JP', serif;"></p>
 
                     <h2 id="modal-name"
-                        class="lol-title font-black text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] tracking-wider mb-2 lg:mb-8 leading-none w-full whitespace-nowrap">
+                        class="lol-title font-black text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] tracking-wider mb-5 lg:mb-8 leading-none w-full whitespace-nowrap">
                     </h2>
 
-                    <div class="flex flex-col gap-1.5 lg:gap-4 w-full items-start">
-                        <div class="flex flex-wrap justify-start gap-1.5 lg:gap-3" id="modal-tags-line1"></div>
-                        <div class="flex flex-wrap justify-start gap-1.5 lg:gap-3" id="modal-tags-line2"></div>
+                    <div class="flex flex-col gap-2.5 lg:gap-4 w-full items-start">
+                        <div class="flex flex-wrap justify-start gap-2 lg:gap-3" id="modal-tags-line1"></div>
+                        <div class="flex flex-wrap justify-start gap-2 lg:gap-3" id="modal-tags-line2"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 右側詳細エリア -->
+            <!-- 【修正】flex-1 を追加して親の余白を下まで埋め、境界線が見えないようにしました -->
             <div
-                class="w-full md:w-[62%] p-4 sm:p-6 lg:p-10 xl:p-12 flex flex-col justify-start md:justify-center overflow-y-auto bg-gradient-to-b from-[#0a1428] to-[#0f1929] relative">
-                <div class="w-full flex flex-col mt-2 sm:mt-0 my-auto">
-                    <!-- スペック表のスマホ時パディングを狭く -->
+                class="w-full md:w-[62%] flex-1 p-5 sm:p-6 lg:p-10 xl:p-12 flex flex-col justify-start md:justify-center overflow-y-auto bg-gradient-to-b from-[#0a1428] to-[#0f1929] relative">
+                <div class="w-full flex flex-col mt-4 sm:mt-0 my-auto">
                     <div
                         class="grid grid-cols-2 gap-0 mb-4 lg:mb-8 bg-[#1e2328]/80 rounded-xl border border-gray-600 shadow-lg w-full lg:w-[95%] backdrop-blur-sm overflow-hidden shrink-0">
                         <div
-                            class="flex flex-row items-center justify-start border-b border-r border-gray-600 py-1.5 px-2 sm:py-2.5 sm:px-4 lg:py-4 xl:py-5 lg:px-6 xl:px-8">
+                            class="flex flex-row items-center justify-start border-b border-r border-gray-600 py-2.5 lg:py-4 xl:py-5 px-4 lg:px-6 xl:px-8">
                             <p
-                                class="text-[10px] sm:text-[11px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[40%] sm:w-[35%] min-w-[50px] max-w-[80px] lg:max-w-[100px]">
+                                class="text-[11px] sm:text-[13px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[35%] min-w-[60px] max-w-[80px] lg:max-w-[100px]">
                                 ダメージ</p>
                             <p id="modal-damage"
-                                class="text-[12px] sm:text-[13px] lg:text-lg xl:text-xl font-black text-white drop-shadow-sm ml-1 sm:ml-2 lg:ml-4 truncate">
+                                class="text-[13px] sm:text-[15px] lg:text-lg xl:text-xl font-black text-white drop-shadow-sm ml-2 lg:ml-4">
                             </p>
                         </div>
                         <div
-                            class="flex flex-row items-center justify-start border-b border-gray-600 py-1.5 px-2 sm:py-2.5 sm:px-4 lg:py-4 xl:py-5 lg:px-6 xl:px-8">
+                            class="flex flex-row items-center justify-start border-b border-gray-600 py-2.5 lg:py-4 xl:py-5 px-4 lg:px-6 xl:px-8">
                             <p
-                                class="text-[10px] sm:text-[11px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[40%] sm:w-[35%] min-w-[50px] max-w-[80px] lg:max-w-[100px]">
+                                class="text-[11px] sm:text-[13px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[35%] min-w-[60px] max-w-[80px] lg:max-w-[100px]">
                                 リソース</p>
                             <p id="modal-resource"
-                                class="text-[12px] sm:text-[13px] lg:text-lg xl:text-xl font-black text-white drop-shadow-sm ml-1 sm:ml-2 lg:ml-4 truncate">
+                                class="text-[13px] sm:text-[15px] lg:text-lg xl:text-xl font-black text-white drop-shadow-sm ml-2 lg:ml-4">
                             </p>
                         </div>
                         <div
-                            class="flex flex-row items-center justify-start border-r border-gray-600 py-1.5 px-2 sm:py-2.5 sm:px-4 lg:py-4 xl:py-5 lg:px-6 xl:px-8">
+                            class="flex flex-row items-center justify-start border-r border-gray-600 py-2.5 lg:py-4 xl:py-5 px-4 lg:px-6 xl:px-8">
                             <p
-                                class="text-[10px] sm:text-[11px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[40%] sm:w-[35%] min-w-[50px] max-w-[80px] lg:max-w-[100px]">
+                                class="text-[11px] sm:text-[13px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[35%] min-w-[60px] max-w-[80px] lg:max-w-[100px]">
                                 射程</p>
                             <p id="modal-range"
-                                class="text-[12px] sm:text-[13px] lg:text-lg xl:text-xl font-black text-white drop-shadow-sm ml-1 sm:ml-2 lg:ml-4 truncate">
+                                class="text-[13px] sm:text-[15px] lg:text-lg xl:text-xl font-black text-white drop-shadow-sm ml-2 lg:ml-4">
                             </p>
                         </div>
                         <div
-                            class="flex flex-row items-center justify-start py-1.5 px-2 sm:py-2.5 sm:px-4 lg:py-4 xl:py-5 lg:px-6 xl:px-8">
+                            class="flex flex-row items-center justify-start py-2.5 lg:py-4 xl:py-5 px-4 lg:px-6 xl:px-8">
                             <p
-                                class="text-[10px] sm:text-[11px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[40%] sm:w-[35%] min-w-[50px] max-w-[80px] lg:max-w-[100px]">
+                                class="text-[11px] sm:text-[13px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[35%] min-w-[60px] max-w-[80px] lg:max-w-[100px]">
                                 難易度</p>
                             <p id="modal-difficulty"
-                                class="text-[12px] sm:text-[13px] lg:text-lg xl:text-xl font-black text-gold tracking-widest drop-shadow-md ml-1 sm:ml-2 lg:ml-4 truncate">
+                                class="text-[13px] sm:text-[15px] lg:text-lg xl:text-xl font-black text-gold tracking-widest drop-shadow-md ml-2 lg:ml-4">
                             </p>
                         </div>
                     </div>
 
                     <h3
-                        class="lol-title text-gold font-bold text-lg sm:text-xl lg:text-3xl xl:text-4xl mb-2 sm:mb-3 lg:mb-6 tracking-widest border-b border-gray-700/60 pb-1 sm:pb-2 lg:pb-3 shrink-0">
+                        class="lol-title text-gold font-bold text-lg sm:text-xl lg:text-3xl xl:text-4xl mb-3 lg:mb-6 tracking-widest border-b border-gray-700/60 pb-2 lg:pb-3 shrink-0">
                         ABILITIES</h3>
 
-                    <div class="flex gap-2.5 sm:gap-4 lg:gap-6 mb-4 lg:mb-8 overflow-x-auto pb-2 sm:pb-4 lg:pb-5 scrollbar-hide shrink-0 px-1 pt-1"
+                    <div class="flex gap-3 sm:gap-4 lg:gap-6 mb-4 lg:mb-8 overflow-x-auto pb-2 sm:pb-4 lg:pb-5 scrollbar-hide shrink-0 px-1 pt-1"
                         id="modal-skills-buttons">
                         <!-- JSで動的生成 -->
                     </div>
 
                     <div
-                        class="bg-[#1e2328]/80 p-3 sm:p-5 lg:p-8 xl:p-10 rounded-xl border border-gray-700/60 min-h-[100px] h-auto shadow-lg backdrop-blur-sm w-full shrink-0">
-                        <div class="flex items-center gap-2 sm:gap-3 lg:gap-5 mb-2 sm:mb-3 lg:mb-6">
+                        class="bg-[#1e2328]/80 p-4 sm:p-5 lg:p-8 xl:p-10 rounded-xl border border-gray-700/60 min-h-[100px] h-auto shadow-lg backdrop-blur-sm w-full shrink-0">
+                        <div class="flex items-center gap-3 lg:gap-5 mb-3 lg:mb-6">
                             <span id="modal-skill-slot"
-                                class="bg-gold text-[#0a1428] font-black px-2 py-0.5 sm:px-3 sm:py-1 lg:px-4 lg:py-2 rounded text-xs sm:text-sm lg:text-lg xl:text-xl tracking-wider shrink-0 shadow-sm"></span>
+                                class="bg-gold text-[#0a1428] font-black px-3 py-1 lg:px-4 lg:py-2 rounded text-sm lg:text-lg xl:text-xl tracking-wider shrink-0 shadow-sm"></span>
 
                             <h4 id="modal-skill-name"
-                                class="text-white font-bold text-base sm:text-lg lg:text-3xl xl:text-4xl break-all drop-shadow-sm"
+                                class="text-white font-bold text-lg sm:text-xl lg:text-3xl xl:text-4xl break-all drop-shadow-sm"
                                 style="font-family: 'Noto Serif JP', serif;"></h4>
                         </div>
                         <p id="modal-skill-desc"
