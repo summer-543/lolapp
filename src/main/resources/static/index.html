@@ -110,8 +110,6 @@
     </style>
 </head>
 
-<!-- 【修正】標準のスクロール方式に戻し、不具合を防ぎます -->
-
 <body class="bg-black text-gray-200 font-sans min-h-screen flex flex-col">
 
     <header
@@ -131,7 +129,6 @@
         </div>
     </header>
 
-    <!-- 【修正】gridを使って、ビューをabsoluteなしで重ね合わせます -->
     <main id="app-container" class="flex-1 w-full relative grid grid-cols-1 grid-rows-1 items-start">
 
         <!-- ============================================== -->
@@ -190,7 +187,6 @@
                         チャンピオン図鑑</h2>
                     <div class="flex flex-col items-end gap-2 w-full lg:w-auto font-medium">
 
-                        <!-- 【修正】検索バーとドロップダウンの並び・文字折り返し対策 -->
                         <div class="grid grid-cols-2 gap-2 w-full sm:w-auto sm:flex sm:flex-wrap justify-end">
                             <div class="col-span-2 sm:col-span-1 w-full sm:w-auto mb-1 sm:mb-0">
                                 <input type="text" id="search-input" placeholder="名前で検索..."
@@ -349,7 +345,6 @@
                     </div>
                 </div>
 
-                <!-- 【修正】スマホ時は3列(grid-cols-3)にし、少しコンパクトにします -->
                 <div id="champion-grid"
                     class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3 sm:gap-4 lg:gap-6 pb-20">
                     <!-- JSでカードを動的生成 -->
@@ -381,8 +376,9 @@
                         class="text-gold text-xs sm:text-sm lg:text-base xl:text-lg font-bold tracking-[0.2em] mb-2 lg:mb-3">
                     </p>
 
+                    <!-- 【修正】スマホは自然に折り返し（break-normal）、PC(sm以上)は単語途中での改行防止（sm:break-keep）を適用 -->
                     <h2 id="question-text"
-                        class="lol-title text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white drop-shadow-md mb-6 lg:mb-8 break-keep leading-snug">
+                        class="lol-title text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white drop-shadow-md mb-6 lg:mb-8 break-normal sm:break-keep leading-snug w-full px-2">
                     </h2>
 
                     <div id="options-container" class="w-full flex flex-col gap-3 lg:gap-4"></div>
@@ -410,7 +406,6 @@
                     <p class="text-gray-300 text-sm sm:text-base lg:text-lg text-center font-medium">あなたにおすすめのチャンピオン</p>
                 </div>
 
-                <!-- 【修正】カードのズレをなくし、中央に綺麗に並べるため mx-auto 等で調整 -->
                 <div id="result-champions-container"
                     class="flex flex-col md:flex-row justify-center items-center md:items-end gap-6 md:gap-4 w-full max-w-[1100px] mb-8 lg:mb-12">
                     <!-- JSで動的生成 -->
@@ -424,7 +419,7 @@
         </div>
 
         <!-- ============================================== -->
-        <!-- 5. LoLクイズ 設定画面 -->
+        <!-- 4.5 LoLクイズ 設定画面 -->
         <!-- ============================================== -->
         <div id="quiz-setup-view"
             class="col-start-1 row-start-1 w-full bg-[#0a1428] min-h-[calc(100vh-80px)] hidden opacity-0 transition-opacity duration-300 z-10">
@@ -512,9 +507,12 @@
 
                 <div
                     class="w-[95%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[50%] max-w-[1400px] bg-panel border border-gold rounded-xl lg:rounded-2xl p-4 sm:p-6 lg:p-10 shadow-2xl flex flex-col items-center text-center relative shrink">
+
+                    <!-- 【修正】スマホは自然に折り返し（break-normal）、PC(sm以上)は単語途中での改行防止（sm:break-keep）を適用 -->
                     <h2 id="quiz-question-text"
-                        class="lol-title text-lg sm:text-xl lg:text-3xl xl:text-4xl font-bold text-white break-keep leading-snug mb-3 lg:mb-5 flex items-center justify-center flex-wrap gap-x-3 gap-y-2">
+                        class="lol-title text-lg sm:text-xl lg:text-3xl xl:text-4xl font-bold text-white break-normal sm:break-keep leading-snug mb-3 lg:mb-5 flex items-center justify-center flex-wrap gap-x-3 gap-y-2 w-full px-2">
                     </h2>
+
                     <div id="quiz-image-container" class="hidden w-full flex justify-center mb-3 lg:mb-5 px-2 sm:px-0">
                         <img id="quiz-image" src="" class="">
                     </div>
@@ -581,7 +579,6 @@
     <!-- ============================================== -->
     <!-- チャンピオン詳細モーダル -->
     <!-- ============================================== -->
-    <!-- 【修正】モーダル全体を独立させて flex コンテナにし、はみ出しやスクロールバグを防ぎます -->
     <div id="champion-modal"
         class="fixed inset-0 z-[60] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-2 sm:p-4 lg:p-8">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModal()"></div>
@@ -591,7 +588,6 @@
             <button onclick="closeModal()"
                 class="absolute top-2 right-2 sm:top-5 sm:right-5 text-gray-400 hover:text-white z-30 text-3xl sm:text-4xl font-light leading-none drop-shadow-md transition-colors bg-black/40 md:bg-transparent rounded-full w-10 h-10 flex items-center justify-center">&times;</button>
 
-            <!-- 【修正】画像エリア: 高さを固定(35vh程度)し、詳細エリアから独立させます -->
             <div class="w-full md:w-[38%] relative bg-black cursor-pointer group shrink-0 h-[35vh] min-h-[220px] md:h-full md:min-h-0"
                 onclick="openSplashModal()">
                 <img id="modal-bg-img" src=""
@@ -619,7 +615,6 @@
                 </div>
             </div>
 
-            <!-- 【修正】詳細エリア: flex-1 と min-h-0 を付け、ここだけでスクロールバーが出るようにします -->
             <div
                 class="w-full md:w-[62%] flex-1 min-h-0 overflow-y-auto bg-gradient-to-b from-[#0a1428] to-[#0f1929] relative p-4 sm:p-6 lg:p-10 xl:p-12 flex flex-col">
                 <div class="w-full flex flex-col mt-auto mb-auto">
