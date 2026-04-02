@@ -1,5 +1,4 @@
 let allChampions = [];
-// スプラッシュアート表示用キャラクターID
 let currentModalChampId = null;
 
 function escapeHTML(str) {
@@ -158,9 +157,6 @@ function switchView(viewId) {
     });
 }
 
-// =====================================
-// 適正診断テスト
-// =====================================
 function startTest() {
     currentQuestionIndex = 0;
     answerHistory = [];
@@ -250,6 +246,7 @@ async function showResult() {
         const top3 = await response.json();
 
         container.innerHTML = '';
+        // 横並び順を考慮した順序指定
         if (top3[0]) container.innerHTML += renderResultCard(top3[0], true, 'order-1 md:order-2');
         if (top3[1]) container.innerHTML += renderResultCard(top3[1], false, 'order-2 md:order-1');
         if (top3[2]) container.innerHTML += renderResultCard(top3[2], false, 'order-3 md:order-3');
@@ -261,7 +258,7 @@ async function showResult() {
 }
 
 function renderResultCard(champ, isFirst, orderClass) {
-    const sizeClass = isFirst ? "w-full max-w-[220px] md:max-w-[280px] lg:max-w-[340px] xl:max-w-[360px] scale-100 z-10" : "w-full max-w-[180px] md:max-w-[240px] lg:max-w-[280px] xl:max-w-[300px] md:scale-95 opacity-90 hover:opacity-100";
+    const sizeClass = isFirst ? "w-full max-w-[240px] md:max-w-[280px] lg:max-w-[340px] xl:max-w-[360px] scale-100 z-10" : "w-full max-w-[200px] md:max-w-[240px] lg:max-w-[280px] xl:max-w-[300px] md:scale-95 opacity-90 hover:opacity-100";
     const shadowClass = isFirst ? "shadow-[0_0_30px_rgba(200,170,110,0.4)]" : "shadow-lg";
     const borderClass = isFirst ? "border-gold" : "border-gray-500 hover:border-gold";
 
@@ -275,7 +272,7 @@ function renderResultCard(champ, isFirst, orderClass) {
     }
 
     return `
-        <div class="flex flex-col items-center ${sizeClass} ${orderClass} transition-all duration-300 mx-1 md:mx-2 mt-6">
+        <div class="flex flex-col items-center ${sizeClass} ${orderClass} transition-all duration-300 mx-1 md:mx-2 mt-4 md:mt-6">
             <div class="w-full bg-panel border-2 ${borderClass} rounded-xl overflow-hidden ${shadowClass} flex flex-col">
                 
                 <div class="relative pt-[100%] bg-black cursor-pointer overflow-hidden group" onclick="openSplashFromResult(${champ.id})">
@@ -497,7 +494,6 @@ async function submitQuizAnswer(qId, optId) {
                 const waitTime = result.currentStreak >= 3 ? 1500 : 1000;
 
                 if (result.currentStreak >= 3) {
-                    // アニメーション終了後に次の問題を表示
                     setTimeout(() => {
                         clearStreakAnimation();
                         setTimeout(fetchNextQuestion, 300);
@@ -520,7 +516,6 @@ async function submitQuizAnswer(qId, optId) {
 
 let streakTimeout = null;
 
-// ストリーク演出処理（3連続正解以上で発動）
 function playStreakAnimation(streak) {
     let text = "";
 
@@ -546,7 +541,6 @@ function playStreakAnimation(streak) {
             if (livesContainer) livesContainer.classList.add('hidden');
             if (streakContainer) streakContainer.classList.remove('hidden');
 
-            // 表示順序の設定
             const scoreDiv = document.querySelector('.text-left.flex.flex-col');
             if (scoreDiv) { scoreDiv.style.position = 'relative'; scoreDiv.style.zIndex = '50'; }
 
@@ -555,7 +549,6 @@ function playStreakAnimation(streak) {
 
             if (streakContainer) { streakContainer.style.zIndex = '30'; }
 
-            // アニメーションの初期状態をセット
             const elementsToAnimate = [headerTextEl, lineEl, bgEl];
 
             elementsToAnimate.forEach(el => {
@@ -566,10 +559,8 @@ function playStreakAnimation(streak) {
                 }
             });
 
-            // リフロー
             if (headerTextEl) void headerTextEl.offsetWidth;
 
-            // 中央へスライドイン
             elementsToAnimate.forEach(el => {
                 if (el) {
                     el.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
@@ -590,7 +581,6 @@ function clearStreakAnimation() {
     const bgEl = document.getElementById('streak-bg');
 
     if (streakContainer && !streakContainer.classList.contains('hidden')) {
-        // 右側へスライドアウト
         const elementsToAnimate = [headerTextEl, lineEl, bgEl];
 
         elementsToAnimate.forEach(el => {
@@ -784,27 +774,28 @@ function openModal(champId) {
         nameEl.textContent = champ.name;
         const nameLength = champ.name.length;
 
+        // スマホで文字がはみ出さないよう、少し控えめのサイズ指定に変更
         if (nameLength >= 13) {
-            nameEl.style.fontSize = 'clamp(1.0rem, 2.0vw, 1.9rem)';
+            nameEl.style.fontSize = 'clamp(0.9rem, 1.8vw, 1.9rem)';
         } else if (nameLength === 12) {
-            nameEl.style.fontSize = 'clamp(1.1rem, 2.2vw, 2.1rem)';
+            nameEl.style.fontSize = 'clamp(1.0rem, 2.0vw, 2.1rem)';
         } else if (nameLength === 11) {
-            nameEl.style.fontSize = 'clamp(1.2rem, 2.4vw, 2.3rem)';
+            nameEl.style.fontSize = 'clamp(1.1rem, 2.2vw, 2.3rem)';
         } else if (nameLength === 10) {
-            nameEl.style.fontSize = 'clamp(1.3rem, 2.6vw, 2.6rem)';
+            nameEl.style.fontSize = 'clamp(1.2rem, 2.4vw, 2.6rem)';
         } else if (nameLength === 9) {
-            nameEl.style.fontSize = 'clamp(1.4rem, 2.8vw, 2.9rem)';
+            nameEl.style.fontSize = 'clamp(1.3rem, 2.6vw, 2.9rem)';
         } else if (nameLength === 8) {
-            nameEl.style.fontSize = 'clamp(1.5rem, 3.3vw, 3.2rem)';
+            nameEl.style.fontSize = 'clamp(1.4rem, 2.8vw, 3.2rem)';
         } else if (nameLength === 7) {
-            nameEl.style.fontSize = 'clamp(1.6rem, 3.8vw, 3.7rem)';
+            nameEl.style.fontSize = 'clamp(1.5rem, 3.3vw, 3.7rem)';
         } else if (nameLength === 6) {
-            nameEl.style.fontSize = 'clamp(1.8rem, 4.3vw, 4.3rem)';
+            nameEl.style.fontSize = 'clamp(1.7rem, 3.8vw, 4.3rem)';
         } else if (nameLength === 5) {
-            nameEl.style.fontSize = 'clamp(2.0rem, 5.0vw, 5.0rem)';
+            nameEl.style.fontSize = 'clamp(1.9rem, 4.5vw, 5.0rem)';
         } else {
-            // 1〜5文字
-            nameEl.style.fontSize = 'clamp(2.2rem, 5.5vw, 5.5rem)';
+            // 1〜4文字
+            nameEl.style.fontSize = 'clamp(2.0rem, 5.0vw, 5.5rem)';
         }
     }
 
@@ -816,25 +807,25 @@ function openModal(champId) {
     if (champ.roles && line1) {
         champ.roles.forEach(role => {
             const roleName = JpMap.roles[role] || role;
-            line1.innerHTML += `<span class="bg-[#c8aa6e]/20 text-[#c8aa6e] px-2 py-1 lg:px-3 lg:py-1.5 rounded text-xs lg:text-sm xl:text-base font-bold border border-[#c8aa6e] shadow-sm">${roleName}</span>`;
+            line1.innerHTML += `<span class="bg-[#c8aa6e]/20 text-[#c8aa6e] px-2 py-0.5 sm:px-2 sm:py-1 lg:px-3 lg:py-1.5 rounded text-[10px] sm:text-xs lg:text-sm xl:text-base font-bold border border-[#c8aa6e] shadow-sm">${roleName}</span>`;
         });
     }
     if (champ.lanes && line1) {
         champ.lanes.forEach(lane => {
             const laneName = JpMap.lanes[lane] || lane;
-            line1.innerHTML += `<span class="bg-gray-600/20 text-gray-300 px-2 py-1 lg:px-3 lg:py-1.5 rounded text-xs lg:text-sm xl:text-base font-bold border border-gray-500 shadow-sm">${laneName}</span>`;
+            line1.innerHTML += `<span class="bg-gray-600/20 text-gray-300 px-2 py-0.5 sm:px-2 sm:py-1 lg:px-3 lg:py-1.5 rounded text-[10px] sm:text-xs lg:text-sm xl:text-base font-bold border border-gray-500 shadow-sm">${laneName}</span>`;
         });
     }
     if (champ.regions && line2) {
         champ.regions.forEach(region => {
             const regionName = JpMap.regions[region] || region;
-            line2.innerHTML += `<span class="bg-emerald-600/20 text-emerald-400 px-2 py-1 lg:px-3 lg:py-1.5 rounded text-xs lg:text-sm xl:text-base font-bold border border-emerald-600 shadow-sm">${regionName}</span>`;
+            line2.innerHTML += `<span class="bg-emerald-600/20 text-emerald-400 px-2 py-0.5 sm:px-2 sm:py-1 lg:px-3 lg:py-1.5 rounded text-[10px] sm:text-xs lg:text-sm xl:text-base font-bold border border-emerald-600 shadow-sm">${regionName}</span>`;
         });
     }
     if (champ.visuals && line2) {
         champ.visuals.forEach(visual => {
             if (JpMap.races && JpMap.races[visual]) {
-                line2.innerHTML += `<span class="bg-purple-600/20 text-purple-400 px-2 py-1 lg:px-3 lg:py-1.5 rounded text-xs lg:text-sm xl:text-base font-bold border border-purple-600 shadow-sm">${JpMap.races[visual]}</span>`;
+                line2.innerHTML += `<span class="bg-purple-600/20 text-purple-400 px-2 py-0.5 sm:px-2 sm:py-1 lg:px-3 lg:py-1.5 rounded text-[10px] sm:text-xs lg:text-sm xl:text-base font-bold border border-purple-600 shadow-sm">${JpMap.races[visual]}</span>`;
             }
         });
     }
@@ -861,7 +852,8 @@ function openModal(champId) {
         if (champ.spells && champ.spells.length > 0) {
             champ.spells.forEach((spell, index) => {
                 const btn = document.createElement('button');
-                const baseClass = "w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 xl:w-24 xl:h-24 rounded-md border-[3px] overflow-hidden shrink-0 transition-all p-0.5 bg-black";
+                // スマホ時はスキルアイコンを少し小さくする (w-11 h-11)
+                const baseClass = "w-11 h-11 sm:w-14 sm:h-14 lg:w-20 lg:h-20 xl:w-24 xl:h-24 rounded-md border-[2px] sm:border-[3px] overflow-hidden shrink-0 transition-all p-0.5 bg-black";
                 btn.className = `${baseClass} ${index === 0 ? 'border-gold scale-110 shadow-[0_0_10px_rgba(200,170,110,0.6)]' : 'border-gray-700 opacity-60 hover:opacity-100 hover:border-gray-400'}`;
                 btn.innerHTML = `<img src="${spell.imagePath}" class="w-full h-full object-cover rounded-sm">`;
 
