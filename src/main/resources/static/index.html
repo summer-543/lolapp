@@ -110,31 +110,35 @@
     </style>
 </head>
 
-<body class="bg-black text-gray-200 font-sans min-h-screen relative overflow-hidden flex flex-col">
+<!-- 【修正】標準のスクロール方式に戻し、不具合を防ぎます -->
+
+<body class="bg-black text-gray-200 font-sans min-h-screen flex flex-col">
 
     <header
-        class="bg-[#09101d] border-b border-[#c8aa6e] py-3 sm:py-4 px-4 md:px-8 lg:px-[5%] xl:px-[8%] sticky top-0 z-40 shadow-lg shrink-0">
-        <div class="w-full mx-auto flex justify-between items-center">
-            <h1 class="lol-title text-xl sm:text-2xl font-bold text-gold cursor-pointer hover:text-white transition tracking-wide"
+        class="bg-[#09101d] border-b border-[#c8aa6e] py-3 sm:py-4 px-4 md:px-8 lg:px-[5%] xl:px-[8%] sticky top-0 z-50 shadow-lg shrink-0">
+        <div class="w-full mx-auto flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
+            <h1 class="lol-title text-xl sm:text-2xl font-bold text-gold cursor-pointer hover:text-white transition tracking-wide text-center"
                 onclick="switchView('home-view')">
                 LoL DB & Quiz
             </h1>
-            <nav class="text-sm sm:text-base font-medium">
-                <button onclick="switchView('home-view')" class="mx-2 hover:text-gold transition">ホーム</button>
-                <button onclick="switchView('champions-view')" class="mx-2 hover:text-gold transition">チャンピオン図鑑</button>
-                <button onclick="startTest()" class="mx-2 hover:text-gold transition">適正診断テスト</button>
-                <button onclick="switchView('quiz-setup-view')" class="mx-2 hover:text-gold transition">知識クイズ</button>
+            <nav
+                class="text-xs sm:text-sm md:text-base font-medium flex flex-wrap justify-center sm:justify-end gap-x-3 gap-y-1">
+                <button onclick="switchView('home-view')" class="hover:text-gold transition">ホーム</button>
+                <button onclick="switchView('champions-view')" class="hover:text-gold transition">チャンピオン図鑑</button>
+                <button onclick="startTest()" class="hover:text-gold transition">適正診断テスト</button>
+                <button onclick="switchView('quiz-setup-view')" class="hover:text-gold transition">知識クイズ</button>
             </nav>
         </div>
     </header>
 
-    <main id="app-container" class="flex-grow relative overflow-hidden">
+    <!-- 【修正】gridを使って、ビューをabsoluteなしで重ね合わせます -->
+    <main id="app-container" class="flex-1 w-full relative grid grid-cols-1 grid-rows-1 items-start">
 
         <!-- ============================================== -->
         <!-- 1. トップ画面 -->
         <!-- ============================================== -->
         <div id="home-view"
-            class="absolute inset-0 bg-[#0a1428] flex flex-col items-center justify-center p-6 sm:p-8 transition-opacity duration-300 overflow-y-auto z-10"
+            class="col-start-1 row-start-1 w-full min-h-[calc(100vh-80px)] flex flex-col items-center justify-center p-6 sm:p-8 transition-opacity duration-300 z-10"
             style="background-image: linear-gradient(to bottom, rgba(10,20,40,0.8), rgba(0,0,0,1)), url('/img/splash/Ahri_0.jpg'); background-size: cover; background-position: center;">
             <h2
                 class="lol-title text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-gold mb-3 md:mb-4 text-center tracking-wider drop-shadow-lg">
@@ -178,23 +182,27 @@
         <!-- 2. チャンピオン一覧画面 -->
         <!-- ============================================== -->
         <div id="champions-view"
-            class="absolute inset-0 bg-[#0a1428] overflow-y-auto py-4 px-4 md:py-8 md:px-8 lg:px-[5%] xl:px-[8%] hidden opacity-0 transition-opacity duration-300 z-10">
+            class="col-start-1 row-start-1 w-full bg-[#0a1428] min-h-[calc(100vh-80px)] py-4 px-4 md:py-8 md:px-8 lg:px-[5%] xl:px-[8%] hidden opacity-0 transition-opacity duration-300 z-10">
             <div class="w-full mx-auto">
                 <div class="flex flex-col lg:flex-row justify-between items-start mb-4 md:mb-6 gap-3">
                     <h2
                         class="lol-title text-2xl sm:text-3xl lg:text-4xl font-bold text-gold tracking-wider shrink-0 mt-1">
                         チャンピオン図鑑</h2>
                     <div class="flex flex-col items-end gap-2 w-full lg:w-auto font-medium">
-                        <div class="flex flex-wrap gap-2 w-full justify-end">
-                            <input type="text" id="search-input" placeholder="名前で検索..."
-                                class="bg-panel border border-gold text-white px-3 py-1.5 lg:py-2 lg:px-4 rounded focus:outline-none focus:ring-2 focus:ring-[#c8aa6e] w-full sm:w-48 lg:w-64 placeholder-gray-500 text-sm lg:text-base transition-shadow">
 
-                            <div class="relative flex-1 sm:flex-none sm:w-36 lg:w-40 custom-dropdown" data-type="role">
+                        <!-- 【修正】検索バーとドロップダウンの並び・文字折り返し対策 -->
+                        <div class="grid grid-cols-2 gap-2 w-full sm:w-auto sm:flex sm:flex-wrap justify-end">
+                            <div class="col-span-2 sm:col-span-1 w-full sm:w-auto mb-1 sm:mb-0">
+                                <input type="text" id="search-input" placeholder="名前で検索..."
+                                    class="bg-panel border border-gold text-white px-3 py-1.5 lg:py-2 lg:px-4 rounded focus:outline-none focus:ring-2 focus:ring-[#c8aa6e] w-full sm:w-48 lg:w-64 placeholder-gray-500 text-sm lg:text-base transition-shadow">
+                            </div>
+
+                            <div class="relative w-full sm:w-32 lg:w-40 custom-dropdown" data-type="role">
                                 <button type="button"
-                                    class="w-full bg-panel border border-gold text-gray-500 px-3 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#c8aa6e] text-sm lg:text-base text-left flex justify-between items-center transition-shadow">
-                                    <span>ロールを選択</span>
-                                    <svg class="w-3.5 h-3.5 text-gray-500 pointer-events-none" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
+                                    class="w-full bg-panel border border-gold text-gray-500 px-2 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#c8aa6e] text-[11px] sm:text-sm lg:text-base flex justify-between items-center transition-shadow whitespace-nowrap">
+                                    <span class="truncate">ロールを選択</span>
+                                    <svg class="w-3 h-3 lg:w-3.5 lg:h-3.5 text-gray-500 shrink-0 pointer-events-none ml-1"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7"></path>
                                     </svg>
@@ -216,12 +224,12 @@
                                 </ul>
                             </div>
 
-                            <div class="relative flex-1 sm:flex-none sm:w-36 lg:w-40 custom-dropdown" data-type="lane">
+                            <div class="relative w-full sm:w-32 lg:w-40 custom-dropdown" data-type="lane">
                                 <button type="button"
-                                    class="w-full bg-panel border border-gray-500 text-gray-500 px-3 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-400 text-sm lg:text-base text-left flex justify-between items-center transition-shadow">
-                                    <span>レーンを選択</span>
-                                    <svg class="w-3.5 h-3.5 text-gray-500 pointer-events-none" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
+                                    class="w-full bg-panel border border-gray-500 text-gray-500 px-2 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-400 text-[11px] sm:text-sm lg:text-base flex justify-between items-center transition-shadow whitespace-nowrap">
+                                    <span class="truncate">レーンを選択</span>
+                                    <svg class="w-3 h-3 lg:w-3.5 lg:h-3.5 text-gray-500 shrink-0 pointer-events-none ml-1"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7"></path>
                                     </svg>
@@ -241,13 +249,12 @@
                                 </ul>
                             </div>
 
-                            <div class="relative flex-1 sm:flex-none sm:w-36 lg:w-40 custom-dropdown"
-                                data-type="region">
+                            <div class="relative w-full sm:w-32 lg:w-40 custom-dropdown" data-type="region">
                                 <button type="button"
-                                    class="w-full bg-panel border border-emerald-700 text-gray-500 px-3 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm lg:text-base text-left flex justify-between items-center transition-shadow">
-                                    <span>地域を選択</span>
-                                    <svg class="w-3.5 h-3.5 text-gray-500 pointer-events-none" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
+                                    class="w-full bg-panel border border-emerald-700 text-gray-500 px-2 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-emerald-500 text-[11px] sm:text-sm lg:text-base flex justify-between items-center transition-shadow whitespace-nowrap">
+                                    <span class="truncate">地域を選択</span>
+                                    <svg class="w-3 h-3 lg:w-3.5 lg:h-3.5 text-gray-500 shrink-0 pointer-events-none ml-1"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7"></path>
                                     </svg>
@@ -285,12 +292,12 @@
                                 </ul>
                             </div>
 
-                            <div class="relative flex-1 sm:flex-none sm:w-36 lg:w-40 custom-dropdown" data-type="race">
+                            <div class="relative w-full sm:w-32 lg:w-40 custom-dropdown" data-type="race">
                                 <button type="button"
-                                    class="w-full bg-panel border border-purple-700 text-gray-500 px-3 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm lg:text-base text-left flex justify-between items-center transition-shadow">
-                                    <span>種族を選択</span>
-                                    <svg class="w-3.5 h-3.5 text-gray-500 pointer-events-none" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
+                                    class="w-full bg-panel border border-purple-700 text-gray-500 px-2 py-1.5 lg:py-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 text-[11px] sm:text-sm lg:text-base flex justify-between items-center transition-shadow whitespace-nowrap">
+                                    <span class="truncate">種族を選択</span>
+                                    <svg class="w-3 h-3 lg:w-3.5 lg:h-3.5 text-gray-500 shrink-0 pointer-events-none ml-1"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7"></path>
                                     </svg>
@@ -337,12 +344,14 @@
                             </div>
                         </div>
                         <div id="active-filters-container"
-                            class="flex flex-wrap justify-end gap-2 min-h-[24px] lg:min-h-[28px] w-full"></div>
+                            class="flex flex-wrap justify-end gap-2 min-h-[24px] lg:min-h-[28px] w-full mt-2 lg:mt-0">
+                        </div>
                     </div>
                 </div>
 
+                <!-- 【修正】スマホ時は3列(grid-cols-3)にし、少しコンパクトにします -->
                 <div id="champion-grid"
-                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-4 sm:gap-5 lg:gap-6 pb-20">
+                    class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3 sm:gap-4 lg:gap-6 pb-20">
                     <!-- JSでカードを動的生成 -->
                 </div>
             </div>
@@ -352,11 +361,11 @@
         <!-- 3. 適正診断テスト画面 -->
         <!-- ============================================== -->
         <div id="test-view"
-            class="absolute inset-0 bg-[#0a1428] hidden opacity-0 transition-opacity duration-300 overflow-y-auto z-10">
+            class="col-start-1 row-start-1 w-full bg-[#0a1428] min-h-[calc(100vh-80px)] hidden opacity-0 transition-opacity duration-300 z-10">
             <div
-                class="min-h-full flex flex-col items-center justify-start pt-8 sm:pt-12 lg:pt-16 xl:pt-20 px-4 sm:px-6 pb-10">
+                class="w-full flex flex-col items-center justify-start pt-8 sm:pt-12 lg:pt-16 xl:pt-20 px-4 sm:px-6 pb-10">
                 <div
-                    class="w-[95%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[55%] max-w-[1200px] bg-panel border-2 border-gold rounded-xl p-6 sm:p-8 lg:p-10 xl:p-12 shadow-2xl flex flex-col items-center text-center relative shrink-0">
+                    class="w-[95%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[55%] max-w-[1200px] bg-panel border-2 border-gold rounded-xl p-6 sm:p-8 lg:p-10 xl:p-12 shadow-2xl flex flex-col items-center text-center relative">
 
                     <button onclick="goBackQuestion()" id="btn-back-question"
                         class="absolute top-4 left-4 lg:top-6 lg:left-6 text-gray-500 hover:text-gold transition-colors hidden">
@@ -392,8 +401,8 @@
         <!-- 4. 適正診断 結果画面 -->
         <!-- ============================================== -->
         <div id="test-result-view"
-            class="absolute inset-0 bg-[#0a1428] hidden opacity-0 transition-opacity duration-300 overflow-y-auto z-10">
-            <div class="min-h-full flex flex-col items-center justify-center py-6 px-4 sm:px-6">
+            class="col-start-1 row-start-1 w-full bg-[#0a1428] min-h-[calc(100vh-80px)] hidden opacity-0 transition-opacity duration-300 z-10">
+            <div class="w-full flex flex-col items-center justify-start pt-6 md:pt-10 pb-20 px-4 sm:px-6">
                 <div class="shrink-0 flex flex-col items-center mb-4 lg:mb-8">
                     <h2
                         class="lol-title text-2xl sm:text-3xl lg:text-4xl font-black text-gold mt-2 mb-1 drop-shadow-md tracking-wider text-center">
@@ -401,8 +410,9 @@
                     <p class="text-gray-300 text-sm sm:text-base lg:text-lg text-center font-medium">あなたにおすすめのチャンピオン</p>
                 </div>
 
+                <!-- 【修正】カードのズレをなくし、中央に綺麗に並べるため mx-auto 等で調整 -->
                 <div id="result-champions-container"
-                    class="flex flex-col md:flex-row justify-center items-end gap-2 md:gap-3 lg:gap-4 w-full max-w-[1100px] mb-6 lg:mb-10 shrink">
+                    class="flex flex-col md:flex-row justify-center items-center md:items-end gap-6 md:gap-4 w-full max-w-[1100px] mb-8 lg:mb-12">
                     <!-- JSで動的生成 -->
                 </div>
 
@@ -414,11 +424,11 @@
         </div>
 
         <!-- ============================================== -->
-        <!-- 4.5 LoLクイズ 設定画面 -->
+        <!-- 5. LoLクイズ 設定画面 -->
         <!-- ============================================== -->
         <div id="quiz-setup-view"
-            class="absolute inset-0 bg-[#0a1428] hidden opacity-0 transition-opacity duration-300 overflow-y-auto z-10">
-            <div class="min-h-full flex flex-col items-center justify-center p-4 sm:p-6">
+            class="col-start-1 row-start-1 w-full bg-[#0a1428] min-h-[calc(100vh-80px)] hidden opacity-0 transition-opacity duration-300 z-10">
+            <div class="w-full flex flex-col items-center justify-center pt-10 pb-20 p-4 sm:p-6">
                 <div
                     class="w-[95%] sm:w-[80%] md:w-[70%] lg:w-[60%] xl:w-[50%] max-w-[1000px] bg-panel border-2 border-gold rounded-xl p-6 sm:p-10 lg:p-14 shadow-2xl text-center">
                     <h2 class="lol-title text-3xl lg:text-5xl font-black text-gold mb-8 lg:mb-12 drop-shadow-md">QUIZ
@@ -457,17 +467,13 @@
         </div>
 
         <!-- ============================================== -->
-        <!-- 5. LoLクイズ 実行画面 (エンドレス版) -->
+        <!-- 6. LoLクイズ 実行画面 -->
         <!-- ============================================== -->
         <div id="quiz-view"
-            class="absolute inset-0 bg-[#0a1428] hidden opacity-0 transition-opacity duration-300 overflow-y-auto z-10">
-            <div class="min-h-full flex flex-col items-center justify-start pt-8 sm:pt-12 lg:pt-16 px-3 sm:px-6 pb-10">
-
-                <!-- スコアヘッダー -->
+            class="col-start-1 row-start-1 w-full bg-[#0a1428] min-h-[calc(100vh-80px)] hidden opacity-0 transition-opacity duration-300 z-10">
+            <div class="w-full flex flex-col items-center justify-start pt-8 sm:pt-12 lg:pt-16 px-3 sm:px-6 pb-10">
                 <div
                     class="w-[95%] sm:w-[85%] md:w-[75%] lg:w-[65%] xl:w-[50%] max-w-[1400px] flex justify-between items-center mb-4 lg:mb-6 px-5 lg:px-8 py-3 lg:py-4 bg-[#1e2328] border border-gray-700 rounded-xl shadow-lg relative min-h-[76px] lg:min-h-[92px] shrink-0 z-30">
-
-                    <!-- 左側 (SCORE) -->
                     <div class="text-left flex flex-col justify-center">
                         <p
                             class="text-[10px] sm:text-xs lg:text-sm text-gray-400 font-bold tracking-wider leading-none mb-1 sm:mb-2">
@@ -475,37 +481,26 @@
                         <p id="quiz-header-score"
                             class="text-2xl sm:text-3xl lg:text-4xl font-black text-white leading-none m-0 p-0">0</p>
                     </div>
-
-                    <!-- 中央 (LIVES & STREAK) -->
                     <div
                         class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none w-full h-full">
-
-                        <!-- ライフ（ハート）表示 -->
                         <div id="quiz-header-lives-container" class="transition-opacity duration-300">
                             <p id="quiz-header-lives"
                                 class="text-2xl sm:text-3xl lg:text-4xl font-black text-red-500 leading-none tracking-widest drop-shadow-sm m-0 p-0">
                                 ❤️❤️❤️</p>
                         </div>
-
-                        <!-- ストリーク表示 -->
                         <div id="streak-text-container"
                             class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center hidden z-50">
-                            <!-- 背景 -->
                             <div id="streak-bg"
                                 class="absolute -inset-x-8 -inset-y-3 sm:-inset-x-12 sm:-inset-y-4 bg-[#1e2328] rounded-md -z-10">
                             </div>
-                            <!-- 文字 -->
                             <h1 id="header-streak-text"
                                 class="lol-title text-xl sm:text-2xl lg:text-4xl font-black italic tracking-tighter uppercase relative z-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] gold-text-gradient whitespace-nowrap mb-1 pr-2">
                             </h1>
-                            <!-- 水色線 -->
                             <div id="streak-underline"
                                 class="h-[2px] sm:h-[3px] w-[150px] sm:w-[250px] lg:w-[350px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_8px_rgba(34,211,238,0.8)] relative z-10">
                             </div>
                         </div>
                     </div>
-
-                    <!-- 右側 (STREAK) -->
                     <div class="text-right flex flex-col justify-center items-end">
                         <p
                             class="text-[10px] sm:text-xs lg:text-sm text-gray-400 font-bold tracking-wider leading-none mb-1 sm:mb-2">
@@ -523,40 +518,33 @@
                     <div id="quiz-image-container" class="hidden w-full flex justify-center mb-3 lg:mb-5 px-2 sm:px-0">
                         <img id="quiz-image" src="" class="">
                     </div>
-                    <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-2 lg:gap-4 w-full">
-                        <!-- JSで動的生成 -->
-                    </div>
+                    <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-2 lg:gap-4 w-full"></div>
                     <div class="mt-4 lg:mt-6 shrink-0" id="giveup-container">
                         <button onclick="giveUpQuiz()"
-                            class="text-gray-500 hover:text-gray-300 text-sm lg:text-base transition-colors border-b border-transparent hover:border-gray-300 pb-0.5">
-                            ギブアップ
-                        </button>
+                            class="text-gray-500 hover:text-gray-300 text-sm lg:text-base transition-colors border-b border-transparent hover:border-gray-300 pb-0.5">ギブアップ</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- ============================================== -->
-        <!-- 6. LoLクイズ 結果(ゲームオーバー)画面 -->
+        <!-- 7. LoLクイズ 結果画面 -->
         <!-- ============================================== -->
         <div id="quiz-result-view"
-            class="absolute inset-0 bg-[#0a1428] hidden opacity-0 transition-opacity duration-300 z-10 overflow-y-auto">
-            <div class="min-h-full flex flex-col items-center justify-center p-4 sm:p-6">
+            class="col-start-1 row-start-1 w-full bg-[#0a1428] min-h-[calc(100vh-80px)] hidden opacity-0 transition-opacity duration-300 z-10">
+            <div class="w-full flex flex-col items-center justify-center pt-8 pb-20 p-4 sm:p-6">
                 <h2
                     class="lol-title text-4xl sm:text-5xl lg:text-6xl font-black text-red-500 mb-4 lg:mb-6 drop-shadow-[0_0_20px_rgba(239,68,68,0.6)] tracking-widest text-center z-20 shrink-0">
                     GAME OVER</h2>
-                <p id="gameover-reason" class="hidden text-gray-400 text-sm lg:text-base mb-4 shrink-0"></p>
 
                 <div
                     class="bg-panel border-2 border-gold/60 rounded-2xl shadow-[0_0_40px_rgba(200,170,110,0.15)] text-center w-[90%] sm:w-[60%] md:w-[45%] xl:w-[35%] max-w-[600px] relative flex flex-col items-center p-6 lg:p-8 h-auto mb-6 lg:mb-8 shrink z-10">
-
                     <div
                         class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[40%] pointer-events-none z-0 w-full flex justify-center">
                         <img id="quiz-rank-img" src="" alt="Rank Emblem"
                             class="w-[600px] sm:w-[800px] lg:w-[1000px] xl:w-[1200px] max-w-none object-contain hidden animate-fade-in mix-blend-screen opacity-90"
                             style="filter: drop-shadow(0 0 15px rgba(200,170,110,0.4));">
                     </div>
-
                     <div class="w-full relative z-10 pt-2 shrink-0">
                         <p
                             class="text-gold text-sm sm:text-base lg:text-lg tracking-[0.3em] mb-1 lg:mb-2 font-bold drop-shadow-md">
@@ -568,13 +556,11 @@
                             class="w-[60%] max-w-[200px] h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mt-2 lg:mt-4 opacity-80 shadow-[0_0_10px_#c8aa6e]">
                         </div>
                     </div>
-
                     <div class="flex-1 w-full flex items-center justify-center relative min-h-[180px] lg:min-h-[280px]">
                         <img id="quiz-rank-img" src="" alt="Rank Emblem"
                             class="absolute w-full h-full object-contain transform scale-[3.0] sm:scale-[4.0] lg:scale-[5.0] translate-y-10 sm:translate-y-14 lg:translate-y-20 hidden animate-fade-in mix-blend-screen opacity-90"
                             style="filter: drop-shadow(0 0 15px rgba(200,170,110,0.4));">
                     </div>
-
                     <div class="w-full relative z-10 pb-2 shrink-0 mt-8 sm:mt-12">
                         <p id="quiz-rank-text"
                             class="lol-title text-[clamp(2rem,5vw,4rem)] font-black drop-shadow-xl tracking-wider"></p>
@@ -595,17 +581,18 @@
     <!-- ============================================== -->
     <!-- チャンピオン詳細モーダル -->
     <!-- ============================================== -->
+    <!-- 【修正】モーダル全体を独立させて flex コンテナにし、はみ出しやスクロールバグを防ぎます -->
     <div id="champion-modal"
-        class="fixed inset-0 z-[55] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-2 sm:p-4 lg:p-8">
+        class="fixed inset-0 z-[60] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-2 sm:p-4 lg:p-8">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModal()"></div>
 
         <div
-            class="relative w-[95vw] md:w-[90vw] lg:w-[85vw] xl:w-[80vw] max-w-[1200px] xl:max-w-[1400px] bg-[#0a1428] border border-gold/40 rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden h-[92vh] md:h-[85vh]">
+            class="relative w-[95vw] md:w-[90vw] lg:w-[85vw] xl:w-[80vw] max-w-[1200px] xl:max-w-[1400px] bg-[#0a1428] border border-gold/40 rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden h-[90vh] md:h-[85vh]">
             <button onclick="closeModal()"
-                class="absolute top-4 right-4 sm:top-5 sm:right-5 text-gray-400 hover:text-white z-30 text-3xl sm:text-4xl font-light leading-none drop-shadow-md transition-colors bg-black/30 md:bg-transparent rounded-full w-10 h-10 flex items-center justify-center">&times;</button>
+                class="absolute top-2 right-2 sm:top-5 sm:right-5 text-gray-400 hover:text-white z-30 text-3xl sm:text-4xl font-light leading-none drop-shadow-md transition-colors bg-black/40 md:bg-transparent rounded-full w-10 h-10 flex items-center justify-center">&times;</button>
 
-            <!-- 【修正】スマホ時の高さを50%に拡大し、縦長画像の見切れを減らしました -->
-            <div class="w-full md:w-[38%] relative bg-black cursor-pointer group shrink-0 h-[50%] md:h-full"
+            <!-- 【修正】画像エリア: 高さを固定(35vh程度)し、詳細エリアから独立させます -->
+            <div class="w-full md:w-[38%] relative bg-black cursor-pointer group shrink-0 h-[35vh] min-h-[220px] md:h-full md:min-h-0"
                 onclick="openSplashModal()">
                 <img id="modal-bg-img" src=""
                     class="absolute inset-0 w-full h-full object-cover object-top opacity-85 group-hover:opacity-100 transition-opacity duration-500">
@@ -618,83 +605,78 @@
                     </svg>
                 </div>
                 <div
-                    class="absolute inset-0 bg-gradient-to-t from-[#041016] via-[#041016]/80 to-transparent flex flex-col justify-end p-5 sm:p-8 lg:p-10 xl:p-12 text-left z-20 overflow-hidden">
+                    class="absolute inset-0 bg-gradient-to-t from-[#041016] via-[#041016]/80 to-transparent flex flex-col justify-end p-4 sm:p-6 lg:p-10 xl:p-12 text-left z-20 overflow-hidden">
                     <p id="modal-title"
-                        class="text-gold text-base sm:text-lg lg:text-2xl xl:text-3xl font-bold tracking-[0.2em] drop-shadow-md mb-1.5 lg:mb-3"
+                        class="text-gold text-xs sm:text-sm lg:text-2xl xl:text-3xl font-bold tracking-[0.2em] drop-shadow-md mb-1 lg:mb-3"
                         style="font-family: 'Noto Serif JP', serif;"></p>
-
                     <h2 id="modal-name"
-                        class="lol-title font-black text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] tracking-wider mb-5 lg:mb-8 leading-none w-full whitespace-nowrap">
+                        class="lol-title font-black text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] tracking-wider mb-3 lg:mb-8 leading-none w-full whitespace-nowrap">
                     </h2>
-
-                    <div class="flex flex-col gap-2.5 lg:gap-4 w-full items-start">
-                        <div class="flex flex-wrap justify-start gap-2 lg:gap-3" id="modal-tags-line1"></div>
-                        <div class="flex flex-wrap justify-start gap-2 lg:gap-3" id="modal-tags-line2"></div>
+                    <div class="flex flex-col gap-1.5 lg:gap-4 w-full items-start">
+                        <div class="flex flex-wrap justify-start gap-1.5 lg:gap-3" id="modal-tags-line1"></div>
+                        <div class="flex flex-wrap justify-start gap-1.5 lg:gap-3" id="modal-tags-line2"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 【修正】flex-1 を追加して親の余白を下まで埋め、境界線が見えないようにしました -->
+            <!-- 【修正】詳細エリア: flex-1 と min-h-0 を付け、ここだけでスクロールバーが出るようにします -->
             <div
-                class="w-full md:w-[62%] flex-1 p-5 sm:p-6 lg:p-10 xl:p-12 flex flex-col justify-start md:justify-center overflow-y-auto bg-gradient-to-b from-[#0a1428] to-[#0f1929] relative">
-                <div class="w-full flex flex-col mt-4 sm:mt-0 my-auto">
+                class="w-full md:w-[62%] flex-1 min-h-0 overflow-y-auto bg-gradient-to-b from-[#0a1428] to-[#0f1929] relative p-4 sm:p-6 lg:p-10 xl:p-12 flex flex-col">
+                <div class="w-full flex flex-col mt-auto mb-auto">
                     <div
                         class="grid grid-cols-2 gap-0 mb-4 lg:mb-8 bg-[#1e2328]/80 rounded-xl border border-gray-600 shadow-lg w-full lg:w-[95%] backdrop-blur-sm overflow-hidden shrink-0">
                         <div
-                            class="flex flex-row items-center justify-start border-b border-r border-gray-600 py-2.5 lg:py-4 xl:py-5 px-4 lg:px-6 xl:px-8">
+                            class="flex flex-row items-center justify-start border-b border-r border-gray-600 py-2 px-3 sm:py-2.5 sm:px-4 lg:py-4 xl:py-5 lg:px-6 xl:px-8">
                             <p
-                                class="text-[11px] sm:text-[13px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[35%] min-w-[60px] max-w-[80px] lg:max-w-[100px]">
+                                class="text-[10px] sm:text-[11px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[40%] sm:w-[35%] min-w-[50px] max-w-[80px] lg:max-w-[100px]">
                                 ダメージ</p>
                             <p id="modal-damage"
-                                class="text-[13px] sm:text-[15px] lg:text-lg xl:text-xl font-black text-white drop-shadow-sm ml-2 lg:ml-4">
+                                class="text-[12px] sm:text-[13px] lg:text-lg xl:text-xl font-black text-white drop-shadow-sm ml-1 sm:ml-2 lg:ml-4 truncate">
                             </p>
                         </div>
                         <div
-                            class="flex flex-row items-center justify-start border-b border-gray-600 py-2.5 lg:py-4 xl:py-5 px-4 lg:px-6 xl:px-8">
+                            class="flex flex-row items-center justify-start border-b border-gray-600 py-2 px-3 sm:py-2.5 sm:px-4 lg:py-4 xl:py-5 lg:px-6 xl:px-8">
                             <p
-                                class="text-[11px] sm:text-[13px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[35%] min-w-[60px] max-w-[80px] lg:max-w-[100px]">
+                                class="text-[10px] sm:text-[11px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[40%] sm:w-[35%] min-w-[50px] max-w-[80px] lg:max-w-[100px]">
                                 リソース</p>
                             <p id="modal-resource"
-                                class="text-[13px] sm:text-[15px] lg:text-lg xl:text-xl font-black text-white drop-shadow-sm ml-2 lg:ml-4">
+                                class="text-[12px] sm:text-[13px] lg:text-lg xl:text-xl font-black text-white drop-shadow-sm ml-1 sm:ml-2 lg:ml-4 truncate">
                             </p>
                         </div>
                         <div
-                            class="flex flex-row items-center justify-start border-r border-gray-600 py-2.5 lg:py-4 xl:py-5 px-4 lg:px-6 xl:px-8">
+                            class="flex flex-row items-center justify-start border-r border-gray-600 py-2 px-3 sm:py-2.5 sm:px-4 lg:py-4 xl:py-5 lg:px-6 xl:px-8">
                             <p
-                                class="text-[11px] sm:text-[13px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[35%] min-w-[60px] max-w-[80px] lg:max-w-[100px]">
+                                class="text-[10px] sm:text-[11px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[40%] sm:w-[35%] min-w-[50px] max-w-[80px] lg:max-w-[100px]">
                                 射程</p>
                             <p id="modal-range"
-                                class="text-[13px] sm:text-[15px] lg:text-lg xl:text-xl font-black text-white drop-shadow-sm ml-2 lg:ml-4">
+                                class="text-[12px] sm:text-[13px] lg:text-lg xl:text-xl font-black text-white drop-shadow-sm ml-1 sm:ml-2 lg:ml-4 truncate">
                             </p>
                         </div>
                         <div
-                            class="flex flex-row items-center justify-start py-2.5 lg:py-4 xl:py-5 px-4 lg:px-6 xl:px-8">
+                            class="flex flex-row items-center justify-start py-2 px-3 sm:py-2.5 sm:px-4 lg:py-4 xl:py-5 lg:px-6 xl:px-8">
                             <p
-                                class="text-[11px] sm:text-[13px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[35%] min-w-[60px] max-w-[80px] lg:max-w-[100px]">
+                                class="text-[10px] sm:text-[11px] lg:text-[15px] xl:text-base text-gray-400 font-extrabold tracking-widest uppercase shrink-0 w-[40%] sm:w-[35%] min-w-[50px] max-w-[80px] lg:max-w-[100px]">
                                 難易度</p>
                             <p id="modal-difficulty"
-                                class="text-[13px] sm:text-[15px] lg:text-lg xl:text-xl font-black text-gold tracking-widest drop-shadow-md ml-2 lg:ml-4">
+                                class="text-[12px] sm:text-[13px] lg:text-lg xl:text-xl font-black text-gold tracking-widest drop-shadow-md ml-1 sm:ml-2 lg:ml-4 truncate">
                             </p>
                         </div>
                     </div>
 
                     <h3
-                        class="lol-title text-gold font-bold text-lg sm:text-xl lg:text-3xl xl:text-4xl mb-3 lg:mb-6 tracking-widest border-b border-gray-700/60 pb-2 lg:pb-3 shrink-0">
+                        class="lol-title text-gold font-bold text-lg sm:text-xl lg:text-3xl xl:text-4xl mb-2 sm:mb-3 lg:mb-6 tracking-widest border-b border-gray-700/60 pb-1 sm:pb-2 lg:pb-3 shrink-0">
                         ABILITIES</h3>
 
-                    <div class="flex gap-3 sm:gap-4 lg:gap-6 mb-4 lg:mb-8 overflow-x-auto pb-2 sm:pb-4 lg:pb-5 scrollbar-hide shrink-0 px-1 pt-1"
-                        id="modal-skills-buttons">
-                        <!-- JSで動的生成 -->
-                    </div>
+                    <div class="flex gap-2.5 sm:gap-4 lg:gap-6 mb-4 lg:mb-8 overflow-x-auto pb-2 sm:pb-4 lg:pb-5 scrollbar-hide shrink-0 px-1 pt-1"
+                        id="modal-skills-buttons"></div>
 
                     <div
-                        class="bg-[#1e2328]/80 p-4 sm:p-5 lg:p-8 xl:p-10 rounded-xl border border-gray-700/60 min-h-[100px] h-auto shadow-lg backdrop-blur-sm w-full shrink-0">
-                        <div class="flex items-center gap-3 lg:gap-5 mb-3 lg:mb-6">
+                        class="bg-[#1e2328]/80 p-3 sm:p-5 lg:p-8 xl:p-10 rounded-xl border border-gray-700/60 min-h-[100px] h-auto shadow-lg backdrop-blur-sm w-full shrink-0">
+                        <div class="flex items-center gap-2 sm:gap-3 lg:gap-5 mb-2 sm:mb-3 lg:mb-6">
                             <span id="modal-skill-slot"
-                                class="bg-gold text-[#0a1428] font-black px-3 py-1 lg:px-4 lg:py-2 rounded text-sm lg:text-lg xl:text-xl tracking-wider shrink-0 shadow-sm"></span>
-
+                                class="bg-gold text-[#0a1428] font-black px-2 py-0.5 sm:px-3 sm:py-1 lg:px-4 lg:py-2 rounded text-xs sm:text-sm lg:text-lg xl:text-xl tracking-wider shrink-0 shadow-sm"></span>
                             <h4 id="modal-skill-name"
-                                class="text-white font-bold text-lg sm:text-xl lg:text-3xl xl:text-4xl break-all drop-shadow-sm"
+                                class="text-white font-bold text-base sm:text-lg lg:text-3xl xl:text-4xl break-all drop-shadow-sm"
                                 style="font-family: 'Noto Serif JP', serif;"></h4>
                         </div>
                         <p id="modal-skill-desc"
@@ -709,7 +691,7 @@
     <!-- ============================================== -->
     <!-- スプラッシュアート表示用モーダル -->
     <!-- ============================================== -->
-    <div id="splash-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4 lg:p-8">
+    <div id="splash-modal" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4 lg:p-8">
         <div class="absolute inset-0 bg-black bg-opacity-90 backdrop-blur-md" onclick="closeSplashModal()"></div>
         <div
             class="relative w-full max-w-7xl h-full flex flex-col items-center justify-center animate-fade-in pointer-events-none">
